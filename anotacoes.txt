@@ -1,0 +1,10 @@
+Blender
+    - Exportar OBJ
+        🧶Geometry > Triangulate Faces
+        🧶Z Up
+        🧶-Y Forward
+
+
+Referencias
+Ringue
+https://sketchfab.com/3d-models/boxing-ring-117f158d570e45999d343f0c4478cc22
