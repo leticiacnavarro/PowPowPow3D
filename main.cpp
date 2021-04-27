@@ -75,7 +75,7 @@ void renderScene(void)
         menu.DesenhaPlacar(pontoLutador, pontoBot);
         util.ProcessaCamera(toggleCam, lutador);
    //     util.DrawAxes(50);
-        ringue.Desenha();
+   //     ringue.Desenha();
         util.Iluminacao(lutador, bot, toggleLight);
         bot.Desenha();
 
@@ -374,11 +374,17 @@ void mouseArrasta(int x, int y)
         if (!buttonDown)
             return;
         
-        util.camYXAngle -= x - util.lastX;
-        util.camYZAngle += y - util.lastY;
+        util.camYXAngle += x - util.lastX;
+        util.camYZAngle -= y - util.lastY;
 
         util.lastX = x;
         util.lastY = y;
+
+        GLfloat s = abs(util.camYXAngle*M_PI/180);
+        GLfloat t = abs(util.camYZAngle*M_PI/180);
+        cout << "x: " << util.zoom * cos(s) * sin(t) << " y: " << util.zoom * sin(s) * sin(t) << " z: " << util.zoom * cos(t) << endl;
+     //   cout << "s: " << (camYXAngle*M_PI/180) << " t: " << (camYZAngle*M_PI/180) << endl;
+
     }
         glutPostRedisplay();
 
@@ -408,7 +414,7 @@ void changeCamera(int angle, int w, int h)
 
     glLoadIdentity ();
 
-    gluPerspective (angle, Width / Height, 1, 1000);
+    gluPerspective (angle, Width / Height, util.zNear, util.zFar);
 
     glMatrixMode (GL_MODELVIEW);
         glutPostRedisplay();

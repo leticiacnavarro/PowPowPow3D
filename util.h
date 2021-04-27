@@ -17,7 +17,6 @@ class Util
     GLfloat gX;
     GLfloat gY;
 
-
 private:
     void CameraPrimeiraPessoa(Lutador &lutador);
     void CameraPulso(Lutador &lutador);
@@ -33,6 +32,9 @@ public:
 
     GLfloat camYXAngle = 0;
     GLfloat camYZAngle = 0;
+
+    GLfloat zNear = 50;
+    GLfloat zFar = 1000;
 
     void ProcessaCamera(int toggle, Lutador &lutador);
     GLint GetCamAngle();

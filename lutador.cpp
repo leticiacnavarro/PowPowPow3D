@@ -44,8 +44,13 @@ void Lutador::DesenhaLutador(GLfloat x, GLfloat y)
 
     glRotatef(gGiro, 0, 0, 1);
     GLuint textureSun;
+    if(gBot){
+        gMesh.loadTextura(LoadTextureRAW("modelos/girl2.bmp")); 
 
-    gMesh.loadTextura(LoadTextureRAW("modelos/girl.bmp"));
+    }
+    else{
+        gMesh.loadTextura(LoadTextureRAW("modelos/girl.bmp")); 
+    }
 
     DesenhaMesh();        
 

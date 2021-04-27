@@ -19,6 +19,8 @@ GLint Util::GetCamAngle(){
 
 void Util::CameraPrimeiraPessoa(Lutador &lutador){
 
+    zNear = 50;
+    zFar = 1000;
 
     GLfloat pontoFocoTras[3];
     GLfloat pontoFocoFrente[3];
@@ -26,7 +28,7 @@ void Util::CameraPrimeiraPessoa(Lutador &lutador){
     lutador.DirecaoPrimeiraPessoa(-150, pontoFocoTras);
     lutador.DirecaoPrimeiraPessoa(20, pontoFocoFrente);
 
-    gluLookAt(lutador.GetZFromMesh(pontoOlho), lutador.GetZFromMesh(pontoOlho), lutador.GetZFromMesh(pontoOlho),
+    gluLookAt(lutador.GetXFromMesh(pontoOlho), lutador.GetYFromMesh(pontoOlho), lutador.GetZFromMesh(pontoOlho),
                 pontoFocoFrente[0], pontoFocoFrente[1], lutador.GetZFromMesh(pontoOlho), 
                 0,0,1);
 }
@@ -46,22 +48,22 @@ void Util::CameraPulso(Lutador &lutador)
 
 }
 void Util::CameraSuperior(Lutador &lutador){
-   // gluLookAt(0,0,250, 0, 0, 0, 0,0,1);
 
-    // gluLookAt(  zoom*sin(camXZAngle*M_PI/180)*cos((camXYAngle*M_PI/180)),
-    //         zoom*                         sin((camXYAngle*M_PI/180)),
-    //         zoom*cos(camXZAngle*M_PI/180)*cos((camXYAngle*M_PI/180)),
-    //         lutador.GetX(), lutador.GetY(), lutador.GetZ(),
-    //         0, 1, 0);
-    int ponto = 13319;// centro do olho
 
-        GLfloat s = (camYXAngle*M_PI/180);
-        GLfloat t = (camYZAngle*M_PI/180);
-        gluLookAt( zoom * cos(s) * sin(t),
-                   zoom * sin(s) * sin(t),
-                   zoom * cos(t),
-                    lutador.GetXFromMesh(ponto), lutador.GetYFromMesh(ponto), lutador.GetZFromMesh(ponto),
-                    0, 1, 0);
+    zNear = 0;
+    zFar = 100;
+
+        GLfloat s = abs(camYXAngle*M_PI/180);
+        GLfloat t = abs(camYZAngle*M_PI/180);
+    //    cout << "x: " << zoom * cos(s) * sin(t) << " y: " << zoom * sin(s) * sin(t) << " z: " << zoom * cos(t) << endl;
+    //   cout << "s: " << (camYXAngle*M_PI/180) << " t: " << (camYZAngle*M_PI/180) << endl;
+
+    gluLookAt(  lutador.GetXFromMesh(pontoBarriga) - zoom * cos(s) * sin(t),
+                lutador.GetYFromMesh(pontoBarriga) - zoom * sin(s) * sin(t),
+                lutador.GetZFromMesh(pontoBarriga) + zoom * cos(t),
+                lutador.GetXFromMesh(pontoBarriga), lutador.GetYFromMesh(pontoBarriga), lutador.GetZFromMesh(pontoBarriga),
+                0, 0, 1);
+
 }
 
 void Util::Iluminacao(Lutador &lutador, Lutador &bot, bool modoNoturno){
