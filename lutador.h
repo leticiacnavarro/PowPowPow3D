@@ -16,7 +16,7 @@ using namespace std;
 #define raioColisao 10
 #define pontoOlho 1619
 #define pontoBraco 2108
-#define framesSoco 15
+#define framesSoco 16
 using namespace std;
 
 

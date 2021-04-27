@@ -253,7 +253,7 @@ bool Lutador::Soca(GLfloat distanciaTotal, GLfloat distanciaPercorrida, GLint br
         contagem = 1;
     }
     std::string frame = std::string(2 - to_string(contagem).length(), '0') + to_string(contagem);
-    std::string objFrame = "modelos/socandoDireito/socando_0000" + frame + ".obj";
+    std::string objFrame = "modelos/socoDireito/untitled_0000" + frame + ".obj";
     gMesh.loadMesh(objFrame);
 
     // bool fezPonto = AcertouCabeca(inimigox, inimigoy, braco);
