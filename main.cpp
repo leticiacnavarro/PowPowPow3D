@@ -74,12 +74,12 @@ void renderScene(void)
     {    
         menu.DesenhaPlacar(pontoLutador, pontoBot);
         util.ProcessaCamera(toggleCam, lutador);
-        util.DrawAxes(50);
-      //  ringue.Desenha();
-     //   util.Iluminacao(lutador, bot, toggleLight);
+   //     util.DrawAxes(50);
+   //     ringue.Desenha();
+        util.Iluminacao(lutador, bot, toggleLight);
+        bot.Desenha();
 
         lutador.Desenha();
-        bot.Desenha();
        
     }
     else if(pontoLutador >= pontoBot)
@@ -156,30 +156,11 @@ void ResetKeyStatus()
 void init(void)
 {
     ResetKeyStatus();
-        glEnable(GL_TEXTURE_2D);
-
+    glEnable(GL_TEXTURE_2D);
     glEnable(GL_LIGHTING);
     glShadeModel (GL_SMOOTH);
     glEnable(GL_LIGHT0);
-  //  glEnable(GL_LIGHT1);
- //   glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-    // The color the windows will redraw. Its done to erase the previous frame.
- 
-    // glMatrixMode(GL_PROJECTION); // Select the projection matrix    
-    // // glOrtho(-WidthHalf,     // X coordinate of left edge             
-    // //         WidthHalf,     // X coordinate of right edge            
-    // //         -HeightHalf,     // Y coordinate of bottom edge             
-    // //         HeightHalf,     // Y coordinate of top edge             
-    // //         -100,     // Z coordinate of the “near” plane            
-    // //         100);    // Z coordinate of the “far” plane
-    // gluPerspective (util.GetCamAngle(), Width / Height, -100, 100);
-
-    // glMatrixMode(GL_MODELVIEW); // Select the projection matrix    
-    // glLoadIdentity();
-    // // gluLookAt(  100,10,5, // Posição
-    // //             lutador.GetX(), lutador.GetY(), lutador.GetZ(), // Direção para onde está olhando
-    // //             0,1,0); // Orientação (up)
       
 }
 

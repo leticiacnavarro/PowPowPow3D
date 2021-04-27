@@ -20,26 +20,20 @@ GLint Util::GetCamAngle(){
 void Util::CameraPrimeiraPessoa(Lutador &lutador){
 
 
-    int ponto = 13319;// centro do olho
-
     GLfloat pontoFocoTras[3];
     GLfloat pontoFocoFrente[3];
 
     lutador.DirecaoPrimeiraPessoa(-150, pontoFocoTras);
     lutador.DirecaoPrimeiraPessoa(20, pontoFocoFrente);
 
-    // gluLookAt(lutador.GetXFromMesh(ponto), lutador.GetYFromMesh(ponto), lutador.GetZFromMesh(ponto),
-    // lutador.GetXFromMesh(ponto) + 10, lutador.GetYFromMesh(ponto), lutador.GetZFromMesh(ponto), 0,1,0);    
-     
-    // gluLookAt(lutador.GetX() +50, lutador.GetY(),150, lutador.GetX() -30, lutador.GetY(),lutador.GetZ(), 0,0,1);
-    gluLookAt(pontoFocoTras[0], pontoFocoTras[1], lutador.GetZFromMesh(ponto) + 75,
-                pontoFocoFrente[0], pontoFocoFrente[1], lutador.GetZFromMesh(ponto)+ 50, 
+    gluLookAt(lutador.GetZFromMesh(pontoOlho), lutador.GetZFromMesh(pontoOlho), lutador.GetZFromMesh(pontoOlho),
+                pontoFocoFrente[0], pontoFocoFrente[1], lutador.GetZFromMesh(pontoOlho), 
                 0,0,1);
 }
 
 void Util::CameraPulso(Lutador &lutador)
 {
-    int ponto = 13319; // centro do olho
+    int ponto = pontoBraco; 
 
     GLfloat pontoFoco[3];
 

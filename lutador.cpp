@@ -1,92 +1,6 @@
 #include "lutador.h"
+#include "ringue.h"
 #include <math.h>
-
-void Lutador::DesenhaRect(GLint height, GLint width, GLfloat R, GLfloat G, GLfloat B)
-{
-    float halfWidth = width/2;
-
-    glColor3f (R, G, B);
-    glBegin(GL_QUADS);
-        glVertex2f(-halfWidth, 0);
-        glVertex2f(halfWidth, 0);
-        glVertex2f(halfWidth, height);
-        glVertex2f(-halfWidth, height);
-    glEnd();
-}
-
-
-
-void DrawObj(double size)
-{
-   GLfloat materialEmission[] = { 0.00, 0.00, 0.00, 1.0};
-   GLfloat materialColor[] = { 1.0, 1.0, 0.0, 1.0};
-   GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0};
-   GLfloat mat_shininess[] = { 128 };
-   glMaterialfv(GL_FRONT, GL_EMISSION, materialEmission);
-   glMaterialfv(GL_FRONT, GL_AMBIENT, materialColor);
-   glMaterialfv(GL_FRONT, GL_DIFFUSE, materialColor);
-   glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-   glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-   glColor3f(1,0,0);
-   glutSolidCube(size);
-//   glutSolidSphere(size, 20, 10);
-}
-
-void Lutador::DesenhaCirc(GLint radius, GLfloat R, GLfloat G, GLfloat B)
-{
-    int pts = 50;
-    glColor3f (R, G, B);
-
-    for(unsigned int i = 0; i <= pts; ++i ){
-
-        float angle = ( i / (float)pts ) * 3.14159f * 2.0f;
-        float x = radius * sin(angle);
-        float y = radius * cos(angle);
-        
-        glPointSize(3);
-
-        glBegin(GL_POLYGON);
-            glVertex3f(x, y, 0.0f);
-    }
-    glEnd();
-}
-
-void Lutador::DesenhaCabeca(GLfloat x, GLfloat y)
-{
-
-    glPushMatrix();
-
-        DesenhaCirc(rCabeca, cabecaRGB[0], cabecaRGB[1], cabecaRGB[2]);
-
-        glTranslatef(0, rCabeca, 0);
-        DesenhaCirc(rNariz, cabecaRGB[0], cabecaRGB[1], cabecaRGB[2]);
-
-
-    glPopMatrix();
-
-}
-
-
-void Lutador::DesenhaBraco(GLfloat x, GLfloat y, GLfloat theta1, GLfloat theta2)
-{
-    glPushMatrix();
-
-    // BRAÇO
-    glTranslatef(x, 0, 0);
-    glRotatef(theta1, 0, 0, 1);
-    DesenhaRect(bracoHeight, bracoWidth, bracoRGB[0], bracoRGB[1], bracoRGB[2]);
- 
-    // ANTEBRAÇO 
-    glTranslatef(0, bracoHeight, 0);
-    glRotatef(theta2, 0, 0, 1);
-    DesenhaRect(bracoHeight, bracoWidth, bracoRGB[0], bracoRGB[1], bracoRGB[2]);
-
-    // MAO
-    glTranslatef(0, bracoHeight + rMao, 0);
-    DesenhaCirc(rMao, maoRGB[0], maoRGB[1], bracoRGB[2]);
-
-    glPopMatrix();
-}
 
 void Lutador::DesenhaMesh()
 {
@@ -131,23 +45,9 @@ void Lutador::DesenhaLutador(GLfloat x, GLfloat y)
     glRotatef(gGiro, 0, 0, 1);
     GLuint textureSun;
 
-    textureSun = gMesh.LoadTextureRAW( "modelos/sun1.bmp" );
+    gMesh.loadTextura(LoadTextureRAW("modelos/girl.bmp"));
 
-
-     DesenhaBraco(rCabeca, y, gThetaDireito1, gThetaDireito2);
-     DesenhaBraco(-rCabeca, y, gThetaEsquerdo1, gThetaEsquerdo2);
-
-     DesenhaCabeca(x, y);
-     gMesh.loadTextura(LoadTextureRAW("modelos/sun1.bmp"));
-
-    // if(gBot){
-    //  //   DrawObj(50.0);
-
-    // }
-    // else{
-       //  glBindTexture (GL_TEXTURE_2D, textureSun);
-         DesenhaMesh();        
-    // }
+    DesenhaMesh();        
 
     glPopMatrix();
 }
@@ -306,10 +206,10 @@ bool Lutador::VerificaSePode(GLfloat dY, GLfloat xArena, GLfloat yArena, GLfloat
     GLfloat xColisaoLutador = gX + (rCabeca * 3);
 
     GLfloat distanciaPontos = DistanciaPontos(xOut, yOut, xLutador2, yLutador2);
-    GLfloat distancia = rCabeca * 3.5;
+    GLfloat distancia = raioColisao * 3.5;
 
-    yArena = (yArena / 2) - rCabeca;
-    xArena = (xArena / 2) - rCabeca;
+    yArena = ladoRingue - raioColisao;
+    xArena = ladoRingue - raioColisao;
 
     if(yOut > (yArena))
         return false;
@@ -347,23 +247,17 @@ void Lutador::SocaBracoEsquerdo(GLfloat angulo1, GLfloat angulo2){
 
 bool Lutador::Soca(GLfloat distanciaTotal, GLfloat distanciaPercorrida, GLint braco, GLfloat inimigox, GLfloat inimigoy){
     
-    GLfloat angulo1 = thetaInicial2 + ((90 * distanciaPercorrida)/distanciaTotal);
-    GLfloat angulo2 = thetaInicial1 - ((60 * distanciaPercorrida)/distanciaTotal);
-    
-    //DIREITO
-    if(braco == 1){
-        SocaBracoDireito(angulo1, angulo2);
-        SocaBracoEsquerdo(thetaInicial1, thetaInicial2);
-
+    GLint contagem = (distanciaPercorrida * framesSoco)/ distanciaTotal;
+    if(contagem < 1)
+    {
+        contagem = 1;
     }
-    //ESQUERDO
-    else if(braco == 2){
-        SocaBracoEsquerdo(-angulo1, - angulo2);
-        SocaBracoDireito(thetaInicial2, thetaInicial1);
-    }
+    std::string frame = std::string(2 - to_string(contagem).length(), '0') + to_string(contagem);
+    std::string objFrame = "modelos/socandoDireito/socando_0000" + frame + ".obj";
+    gMesh.loadMesh(objFrame);
 
-    bool fezPonto = AcertouCabeca(inimigox, inimigoy, braco);
-    return fezPonto;
+    // bool fezPonto = AcertouCabeca(inimigox, inimigoy, braco);
+    return false;
 }
 
 
@@ -385,16 +279,6 @@ GLfloat Lutador::GetY(){
 GLfloat Lutador::GetZ(){
     return gZ;
 }
-
-// GLfloat Lutador::GetXColisao(){
-//     GLfloat colisao = gX + (rCabeca * 3);
-//     return gX;
-// }
-
-// GLfloat Lutador::GetYColisao(){
-//     GLfloat colisao = gY + (rCabeca * 3);
-//     return gY;
-// }
 
 GLfloat CalculaCoeficienteCabecas(GLfloat gXLutador, GLfloat gYLutador, GLfloat gX, GLfloat gY){
 
@@ -439,12 +323,16 @@ void Lutador::GiraSozinho(GLfloat inc, GLfloat xLutador, GLfloat yLutador)
     gGiro = anguloLutador;
 }
 GLfloat Lutador::GetXFromMesh(GLfloat meshpoint){
+   // cout << "x" << gMesh.vertsPos[meshpoint].z << endl;
+
     return gMesh.vertsPos[meshpoint].x + gX;
 }
 GLfloat Lutador::GetYFromMesh(GLfloat meshpoint){
+     //   cout << "y" << gMesh.vertsPos[meshpoint].z << endl;
+
     return gMesh.vertsPos[meshpoint].y + gY;
 }
 GLfloat Lutador::GetZFromMesh(GLfloat meshpoint){
-//    cout << gMesh.vertsPos[meshpoint].z << endl;
+   // cout << "z" << gMesh.vertsPos[meshpoint].z << endl;
     return gMesh.vertsPos[meshpoint].z + gZ;
 }

@@ -13,6 +13,10 @@ using namespace std;
 #define thetaInicial1 135
 #define thetaInicial2 225
 
+#define raioColisao 20
+#define pontoOlho 1619
+#define pontoBraco 2108
+#define framesSoco 28
 using namespace std;
 
 
@@ -120,8 +124,7 @@ public:
             cabecaRGB = cabecaLutadorRGB;
             bracoRGB = bracoLutadorRGB;
         }  
-        gMesh.loadMesh("modelos/corpo.obj");
-      //  gMesh.loadTextura(gMesh.LoadTextureRAW("modelos/sun1.bmp"));
+        gMesh.loadMesh("modelos/socandoDireito/socando_000001.obj");
     };
 
     GLfloat GetX();

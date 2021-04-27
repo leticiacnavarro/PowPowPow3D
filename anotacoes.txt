@@ -8,3 +8,9 @@ Blender
 Referencias
 Ringue
 https://sketchfab.com/3d-models/boxing-ring-117f158d570e45999d343f0c4478cc22
+
+Estou nas coordenadas X-Y no 2D. Qual a melhor forma de passar para o 3D?
+
+Como colocar elementos 2D na frente dos 3D sem que a posição da câmera atrapalhe eles.
+
+Como deixar os OBJ mais leves mesmo com bastante vértices?

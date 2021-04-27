@@ -10,8 +10,8 @@ using namespace std;
 #define thetaInicial1 135
 #define thetaInicial2 225
 
-using namespace std;
-
+#define ladoRingue 180
+#define profundidade 30
 #include "objloader.h"
 
 class Ringue
@@ -37,13 +37,7 @@ public:
 
     void Iniciacao(GLfloat x, GLfloat y, GLfloat proporcao){
         
-        gX = x/2;
-        gY = y/2;
-        gZ = x/2;
-
-        gProporcao = gX/2;
-      //  gMesh.loadMesh("modelos/ringue.obj");
-        gMesh.loadMesh("modelos/ringueBonito.obj");
+    gMesh.loadMesh("modelos/ringue.obj");
 
     };
 

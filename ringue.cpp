@@ -21,11 +21,10 @@ void DesenhaCirc(GLint radius, GLfloat R, GLfloat G, GLfloat B)
 }
 void Ringue::DesenhaRingue()
 {
-      glPushMatrix();
-    //    glTranslatef(0, 0, -70);
-    //    glScalef(200, 200, 200);
+    glPushMatrix();
+        glTranslatef(0, 0, -profundidade);
         gMesh.draw();
-      glPopMatrix();
+    glPopMatrix();
 
 }
 
