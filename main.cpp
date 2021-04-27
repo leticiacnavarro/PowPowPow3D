@@ -63,11 +63,11 @@ int buttonDown = 0;
 void renderScene(void)
 {
     
-     // Clear the screen.
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity(); 
     glClearColor(0.692,	0.852,	0.988, 1.0f); // Black, no opacity(alpha).
     glClear (   GL_COLOR_BUFFER_BIT | 
                 GL_DEPTH_BUFFER_BIT);
-    glLoadIdentity();
 
     
     if(pontoLutador < 10 && pontoBot < 10)
@@ -75,7 +75,7 @@ void renderScene(void)
         menu.DesenhaPlacar(pontoLutador, pontoBot);
         util.ProcessaCamera(toggleCam, lutador);
    //     util.DrawAxes(50);
-   //     ringue.Desenha();
+        ringue.Desenha();
         util.Iluminacao(lutador, bot, toggleLight);
         bot.Desenha();
 
@@ -157,10 +157,10 @@ void init(void)
 {
     ResetKeyStatus();
     glEnable(GL_TEXTURE_2D);
-    glEnable(GL_LIGHTING);
     glShadeModel (GL_SMOOTH);
+    glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
-    glEnable(GL_CULL_FACE);
+    glEnable(GL_DEPTH_TEST);
       
 }
 
@@ -211,6 +211,7 @@ void movimentaBot(double inc)
         }
     }
     bot.GiraSozinho(inc, lutador.GetX(), lutador.GetY());
+
 }
 
 bool VerificaSeEstaAndando()
@@ -366,6 +367,7 @@ void mouseArrasta(int x, int y)
     
         }
         }
+        
     }
     else
     {
@@ -377,8 +379,8 @@ void mouseArrasta(int x, int y)
 
         util.lastX = x;
         util.lastY = y;
-        glutPostRedisplay();
     }
+        glutPostRedisplay();
 
 }
 
@@ -406,9 +408,11 @@ void changeCamera(int angle, int w, int h)
 
     glLoadIdentity ();
 
-    gluPerspective (angle, Width / Height, 0, 100);
+    gluPerspective (angle, Width / Height, 1, 1000);
 
     glMatrixMode (GL_MODELVIEW);
+        glutPostRedisplay();
+
 }
 
 void reshape (int w, int h) {
