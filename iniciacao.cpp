@@ -148,8 +148,9 @@ void Iniciacao::IniciaLutadores(Lutador &lutador, Lutador &bot)
 
     gXBot = (ladoRingue * gXBot)/width;
     gYBot = (ladoRingue * gYBot)/width;
+ //   lutador.Iniciacao(gXLutador, gYLutador, 0, gGiroLutador, rCabecaLutador, false);
 
-    lutador.Iniciacao(gXLutador, gYLutador, 0, gGiroLutador, rCabecaLutador, false);
+    lutador.Iniciacao(0,0, 0, gGiroLutador, rCabecaLutador, false);
     bot.Iniciacao(gXBot, gYBot, 0, gGiroBot, rCabecaBot, true);
 }
 

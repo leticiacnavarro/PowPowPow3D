@@ -72,7 +72,10 @@ void renderScene(void)
     
     if(pontoLutador < 10 && pontoBot < 10)
     {    
+                        menu.DesenhaMiniMapa(lutador.GetX(), lutador.GetY(), bot.GetX(), bot.GetY());
+
         menu.DesenhaPlacar(pontoLutador, pontoBot);
+
         util.ProcessaCamera(toggleCam, lutador);
    //     util.DrawAxes(50);
         ringue.Desenha();

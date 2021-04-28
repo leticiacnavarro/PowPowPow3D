@@ -19,7 +19,7 @@ GLint Util::GetCamAngle(){
 
 void Util::CameraPrimeiraPessoa(Lutador &lutador){
 
-    zNear = 50;
+    zNear = -20;
     zFar = 1000;
 
     GLfloat pontoFocoTras[3];
@@ -35,6 +35,9 @@ void Util::CameraPrimeiraPessoa(Lutador &lutador){
 
 void Util::CameraPulso(Lutador &lutador)
 {
+    zNear = 0;
+    zFar = 1000;
+
     int ponto = pontoBraco; 
 
     GLfloat pontoFoco[3];

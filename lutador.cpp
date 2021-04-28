@@ -134,7 +134,7 @@ void Lutador::Anda(GLfloat dY)
     }
     std::string frame = std::string(2 - to_string(posicao).length(), '0') + to_string(posicao);
     std::string objFrame;
-    objFrame = "modelos/walking/walking_0000" + frame + ".obj";
+    objFrame = "modelos/andar/andar_0000" + frame + ".obj";
     gMesh.loadMesh(objFrame);
 
 }
@@ -365,14 +365,14 @@ void Lutador::GiraSozinho(GLfloat inc, GLfloat xLutador, GLfloat yLutador)
 GLfloat Lutador::GetXFromMesh(GLfloat meshpoint){
    // cout << "x" << gMesh.vertsPos[meshpoint].z << endl;
 
-    return gMesh.vertsPos[meshpoint].x + gX;
+    return gMeshInglesVer.vertsPos[meshpoint].x + gX;
 }
 GLfloat Lutador::GetYFromMesh(GLfloat meshpoint){
      //   cout << "y" << gMesh.vertsPos[meshpoint].z << endl;
 
-    return gMesh.vertsPos[meshpoint].y + gY;
+    return gMeshInglesVer.vertsPos[meshpoint].y + gY;
 }
 GLfloat Lutador::GetZFromMesh(GLfloat meshpoint){
    // cout << "z" << gMesh.vertsPos[meshpoint].z << endl;
-    return gMesh.vertsPos[meshpoint].z + gZ;
+    return gMeshInglesVer.vertsPos[meshpoint].z + gZ;
 }

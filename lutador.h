@@ -14,12 +14,13 @@ using namespace std;
 #define thetaInicial2 225
 
 #define raioColisao 10
-#define pontoOlho 1619
-#define pontoBraco 2108
+
+#define pontoOlho 2833
+#define pontoBraco 2718
 #define pontoBarriga 1882
 
 #define framesSoco 16
-#define framesAnda 20
+#define framesAnda 31
 
 using namespace std;
 
@@ -55,6 +56,7 @@ class Lutador
 
     //3d
     mesh gMesh;
+    mesh gMeshInglesVer;
 
     //Proporcao
     GLfloat gProporcao;
@@ -65,14 +67,6 @@ class Lutador
     //Andar
     GLuint posicao;
 private:
-    void DesenhaRect(GLint height, GLint width, GLfloat R, GLfloat G, GLfloat B);
-
-    void DesenhaCirc(GLint radius, GLfloat R, GLfloat G, GLfloat B);
-
-    void DesenhaCabeca(GLfloat x, GLfloat y);
-
-    void DesenhaBraco(GLfloat x, GLfloat y, GLfloat theta1, GLfloat theta2);
-
     void DesenhaLutador(GLfloat x, GLfloat y);
 
     bool AcertouCabeca(GLfloat inimigox, GLfloat inimigoy, int braco);
@@ -136,6 +130,7 @@ public:
       //        gMesh.loadMesh("modelos/socandoDireito/socando_000001.obj");
 
         gMesh.loadMesh("modelos/walking/walking_000001.obj");
+        gMeshInglesVer.loadMesh("modelos/girl.obj");
 
     };
 

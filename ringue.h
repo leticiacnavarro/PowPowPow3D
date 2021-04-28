@@ -11,7 +11,7 @@ using namespace std;
 #define thetaInicial2 225
 
 #define ladoRingue 180
-#define profundidade 30
+#define profundidade 60
 #include "objloader.h"
 
 class Ringue
