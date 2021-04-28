@@ -19,6 +19,8 @@ using namespace std;
 #define pontoBarriga 1882
 
 #define framesSoco 16
+#define framesAnda 20
+
 using namespace std;
 
 
@@ -59,6 +61,9 @@ class Lutador
 
     //Bot
     bool gBot;
+
+    //Andar
+    GLuint posicao;
 private:
     void DesenhaRect(GLint height, GLint width, GLfloat R, GLfloat G, GLfloat B);
 
@@ -77,6 +82,8 @@ private:
     void SocaBracoEsquerdo(GLfloat angulo1, GLfloat angulo2);
 
     void DesenhaMesh();
+    
+    GLuint LoadTextureRAW( const char * filename );
 
 public:
 
@@ -128,7 +135,8 @@ public:
         }  
       //        gMesh.loadMesh("modelos/socandoDireito/socando_000001.obj");
 
-        gMesh.loadMesh("modelos/girl.obj");
+        gMesh.loadMesh("modelos/walking/walking_000001.obj");
+
     };
 
     GLfloat GetX();
@@ -160,6 +168,8 @@ public:
     GLfloat GetZFromMesh(GLfloat meshpoint);
 
     void DirecaoPrimeiraPessoa(GLfloat dY, GLfloat ponto[3]);
+
+    void CarregaTexturas();
 };
 
 #endif	/* LUTADOR_H */

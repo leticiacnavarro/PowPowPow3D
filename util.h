@@ -27,11 +27,11 @@ public:
     GLint lastX = 0;
     GLint lastY = 0;
 
-    GLint zoom = 150;
+    GLint zoom = 120;
     GLint camAngle = 60;
 
-    GLfloat camYXAngle = 0;
-    GLfloat camYZAngle = 0;
+    GLfloat camYXAngle = -192;
+    GLfloat camYZAngle = 67;
 
     GLfloat zNear = 50;
     GLfloat zFar = 1000;

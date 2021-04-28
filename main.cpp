@@ -75,7 +75,7 @@ void renderScene(void)
         menu.DesenhaPlacar(pontoLutador, pontoBot);
         util.ProcessaCamera(toggleCam, lutador);
    //     util.DrawAxes(50);
-   //     ringue.Desenha();
+        ringue.Desenha();
         util.Iluminacao(lutador, bot, toggleLight);
         bot.Desenha();
 
@@ -161,7 +161,9 @@ void init(void)
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
     glEnable(GL_DEPTH_TEST);
-      
+
+    lutador.CarregaTexturas();
+    bot.CarregaTexturas();  
 }
 
 void movimentaBot(double inc)
@@ -382,8 +384,7 @@ void mouseArrasta(int x, int y)
 
         GLfloat s = abs(util.camYXAngle*M_PI/180);
         GLfloat t = abs(util.camYZAngle*M_PI/180);
-        cout << "x: " << util.zoom * cos(s) * sin(t) << " y: " << util.zoom * sin(s) * sin(t) << " z: " << util.zoom * cos(t) << endl;
-     //   cout << "s: " << (camYXAngle*M_PI/180) << " t: " << (camYZAngle*M_PI/180) << endl;
+        // cout << "s: " << (util.camYXAngle) << " t: " << (util.camYZAngle) << endl;
 
     }
         glutPostRedisplay();

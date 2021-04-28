@@ -53,10 +53,8 @@ void Util::CameraSuperior(Lutador &lutador){
     zNear = 0;
     zFar = 100;
 
-        GLfloat s = abs(camYXAngle*M_PI/180);
-        GLfloat t = abs(camYZAngle*M_PI/180);
-    //    cout << "x: " << zoom * cos(s) * sin(t) << " y: " << zoom * sin(s) * sin(t) << " z: " << zoom * cos(t) << endl;
-    //   cout << "s: " << (camYXAngle*M_PI/180) << " t: " << (camYZAngle*M_PI/180) << endl;
+    GLfloat s = abs(camYXAngle*M_PI/180);
+    GLfloat t = abs(camYZAngle*M_PI/180);
 
     gluLookAt(  lutador.GetXFromMesh(pontoBarriga) - zoom * cos(s) * sin(t),
                 lutador.GetYFromMesh(pontoBarriga) - zoom * sin(s) * sin(t),

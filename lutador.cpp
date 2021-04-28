@@ -11,7 +11,7 @@ void Lutador::DesenhaMesh()
 
 }
 
-GLuint LoadTextureRAW( const char * filename )
+GLuint Lutador::LoadTextureRAW( const char * filename )
 {
 
     GLuint texture;
@@ -37,6 +37,19 @@ GLuint LoadTextureRAW( const char * filename )
 
     return texture;
 }
+
+
+void Lutador::CarregaTexturas()
+{
+    if(gBot)
+    {
+       gMesh.loadTextura(LoadTextureRAW("modelos/girl2.bmp")); 
+
+    }
+    else{
+        gMesh.loadTextura(LoadTextureRAW("modelos/girl.bmp")); 
+    }
+}
 void Lutador::DesenhaLutador(GLfloat x, GLfloat y)
 {
     glPushMatrix();
@@ -44,13 +57,7 @@ void Lutador::DesenhaLutador(GLfloat x, GLfloat y)
 
     glRotatef(gGiro, 0, 0, 1);
     GLuint textureSun;
-    if(gBot){
-        gMesh.loadTextura(LoadTextureRAW("modelos/girl2.bmp")); 
 
-    }
-    else{
-        gMesh.loadTextura(LoadTextureRAW("modelos/girl.bmp")); 
-    }
 
     DesenhaMesh();        
 
@@ -120,6 +127,15 @@ void Lutador::Anda(GLfloat dY)
     gX = xOut;
     gY = yOut;
 
+    posicao++;
+
+    if(posicao > framesAnda){
+        posicao = 1;
+    }
+    std::string frame = std::string(2 - to_string(posicao).length(), '0') + to_string(posicao);
+    std::string objFrame;
+    objFrame = "modelos/walking/walking_0000" + frame + ".obj";
+    gMesh.loadMesh(objFrame);
 
 }
 
@@ -258,10 +274,29 @@ bool Lutador::Soca(GLfloat distanciaTotal, GLfloat distanciaPercorrida, GLint br
         contagem = 1;
     }
     std::string frame = std::string(2 - to_string(contagem).length(), '0') + to_string(contagem);
-    std::string objFrame = "modelos/socoDireito/untitled_0000" + frame + ".obj";
+    std::string objFrame;
+    if(braco == 1)
+    {
+        objFrame = "modelos/socoDireito/untitled_0000" + frame + ".obj";
+    }
+    else
+    {
+        objFrame = "modelos/socoEsquerdo/socoEsquerdo_0000" + frame + ".obj";
+    }
+
+   // cout << contagem <<  endl;
+    // cout << "distanciaPercorrida " << distanciaPercorrida <<  endl;
+    // cout << "distanciaTotal " << distanciaTotal <<  endl;
+
+    // cout << "contagem " << contagem <<  endl;
+
     gMesh.loadMesh(objFrame);
 
     // bool fezPonto = AcertouCabeca(inimigox, inimigoy, braco);
+    
+    if(contagem >= 17){
+        return true;
+    }
     return false;
 }
 

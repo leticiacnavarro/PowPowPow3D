@@ -3,7 +3,9 @@ Blender
         🧶Geometry > Triangulate Faces
         🧶Z Up
         🧶-Y Forward
-
+        🧶50 scale
+    - Diminuir tamahho
+        Mesh >> Cleanup >> Decimate Geometry
 
 Referencias
 Ringue
