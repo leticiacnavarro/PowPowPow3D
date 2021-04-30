@@ -79,6 +79,27 @@ void RotatePoint(GLfloat x, GLfloat y, GLfloat angle, GLfloat &xOut, GLfloat &yO
 
 }
 
+GLfloat RotateX(GLfloat x, GLfloat y, GLfloat angle){
+
+    GLfloat angle2 = angle * (3.14/180);
+
+    GLfloat xl = (cos(angle2) * x) - (y * sin(angle2));
+    GLfloat yl = (sin(angle2) * x) + (y * cos(angle2));
+
+    return xl;
+}
+
+GLfloat RotateY(GLfloat x, GLfloat y, GLfloat angle){
+
+    GLfloat angle2 = angle * (3.14/180);
+
+    GLfloat xl = (cos(angle2) * x) - (y * sin(angle2));
+    GLfloat yl = (sin(angle2) * x) + (y * cos(angle2));
+
+    return yl;
+}
+
+
 //Função pra ver aonde tá apontando o nariz
 void DirecaoNariz(GLfloat raio, GLfloat angulo, GLfloat gx, GLfloat gy, GLfloat &x, GLfloat &y, GLfloat dy)
 {
@@ -267,8 +288,20 @@ void Lutador::SocaBracoEsquerdo(GLfloat angulo1, GLfloat angulo2){
 }
 
 bool Lutador::Soca(GLfloat distanciaTotal, GLfloat distanciaPercorrida, GLint braco, GLfloat inimigox, GLfloat inimigoy){
-    
+    cout << "socoAux: " << socoAux << endl;
+
+
+    if(socoAux > framesSoco){
+
+        socoAux = framesSoco;
+    }
+
     GLint contagem = (distanciaPercorrida * framesSoco)/ distanciaTotal;
+    if(contagem > socoAux){
+        socoAux++;
+        contagem = socoAux;
+    }
+
     if(contagem < 1)
     {
         contagem = 1;
@@ -277,15 +310,15 @@ bool Lutador::Soca(GLfloat distanciaTotal, GLfloat distanciaPercorrida, GLint br
     std::string objFrame;
     if(braco == 1)
     {
-        objFrame = "modelos/socoDireito/untitled_0000" + frame + ".obj";
+        objFrame = "modelos/direito/direito_0000" + frame + ".obj";
     }
     else
     {
-        objFrame = "modelos/socoEsquerdo/socoEsquerdo_0000" + frame + ".obj";
+        objFrame = "modelos/esquerdo/esquerdo_0000" + frame + ".obj";
     }
 
    // cout << contagem <<  endl;
-    // cout << "distanciaPercorrida " << distanciaPercorrida <<  endl;
+  //   cout << "distanciaPercorrida " << distanciaPercorrida <<  endl;
     // cout << "distanciaTotal " << distanciaTotal <<  endl;
 
     // cout << "contagem " << contagem <<  endl;
@@ -305,7 +338,7 @@ void Lutador::ParaDeSocar()
 {
     SocaBracoEsquerdo(135, 225);
     SocaBracoDireito(225, 135);
-
+    socoAux = 0;
 }
 
 GLfloat Lutador::GetX(){
@@ -375,4 +408,19 @@ GLfloat Lutador::GetYFromMesh(GLfloat meshpoint){
 GLfloat Lutador::GetZFromMesh(GLfloat meshpoint){
    // cout << "z" << gMesh.vertsPos[meshpoint].z << endl;
     return gMeshInglesVer.vertsPos[meshpoint].z + gZ;
+}
+GLfloat Lutador::GetXFromRealMesh(GLfloat meshpoint){
+   // cout << "x" << gMesh.vertsPos[meshpoint].z << endl;
+    GLfloat point = RotateX(gMesh.vertsPos[meshpoint].x, gMesh.vertsPos[meshpoint].y, gGiro);
+    return point + gX;
+}
+GLfloat Lutador::GetYFromRealMesh(GLfloat meshpoint){
+     //   cout << "y" << gMesh.vertsPos[meshpoint].z << endl;
+    GLfloat point = RotateY(gMesh.vertsPos[meshpoint].x, gMesh.vertsPos[meshpoint].y, gGiro);
+    return point + gY;
+}
+GLfloat Lutador::GetZFromRealMesh(GLfloat meshpoint){
+   // cout << "z" << gMesh.vertsPos[meshpoint].z << endl;
+    return gMesh.vertsPos[meshpoint].z + gZ;
+
 }

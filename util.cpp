@@ -68,32 +68,84 @@ void Util::CameraSuperior(Lutador &lutador){
 }
 
 void Util::Iluminacao(Lutador &lutador, Lutador &bot, bool modoNoturno){
-      //  cout << modoNoturno << endl;
+    if(modoNoturno)
+    {
+        glDisable (GL_LIGHT1);
+        glDisable (GL_LIGHTING);
 
-    if(modoNoturno){
-         GLfloat light_position[] = { lutador.GetX(), lutador.GetY(), 50.0, 1.0 };
-         glLightfv(  GL_LIGHT0, GL_SPOT_DIRECTION, light_position);
-        // GLfloat light_position2[] = { bot.GetX(), bot.GetY(), 50.0, 1.0 };
-        // glLightfv(  GL_LIGHT1, GL_SPOT_DIRECTION, light_position2);
-        
-    }
-    else{
-            //Define e desenha a fonte de luz
-        GLfloat light_position[] = {10, 10, 80, 1};
+        GLfloat light_position[] = {10, 10, 50, 1};
         glLightfv(GL_LIGHT0,GL_POSITION,light_position);
         glDisable(GL_LIGHTING);
             glPointSize(15);
             glColor3f(1.0,1.0,0.0);
             glBegin(GL_POINTS);
                 glVertex3f(light_position[0],light_position[1],light_position[2]);
-            glEnd();    
+            glEnd();  
+            
+    //    glEnable(GL_LIGHT0);       
         glEnable(GL_LIGHTING);
-        // GLfloat light_position[] = {0, 0, 200.0, 1.0 };
-        // glLightfv(  GL_LIGHT0, GL_POSITION, light_position);
+
     }
-    // GLfloat light_position[] = {0, 0, 200.0, 1.0 };
-    // glLightfv(  GL_LIGHT0, GL_POSITION, light_position);
-    
+    else{
+       
+        glDisable (GL_LIGHTING);
+        glDisable (GL_LIGHT0);
+
+        GLfloat pontoFoco[3];
+
+    lutador.DirecaoPrimeiraPessoa(20, pontoFoco);
+
+        GLfloat light1_ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+        GLfloat light1_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+        GLfloat light1_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+        GLfloat light1_position[] = {lutador.GetXFromRealMesh(pontoOlho), lutador.GetYFromRealMesh(pontoOlho), lutador.GetZFromRealMesh(pontoOlho) + 20, 1};
+        GLfloat spot_direction[4] = { lutador.GetXFromRealMesh(pontoOlho), lutador.GetYFromRealMesh(pontoOlho), lutador.GetZFromRealMesh(pontoOlho), 0.0f };
+
+        glLightfv(GL_LIGHT1, GL_AMBIENT, light1_ambient);
+        glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse);
+        glLightfv(GL_LIGHT1, GL_SPECULAR, light1_specular);
+        glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
+        glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0);
+        glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.5);
+        glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0);
+
+        glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 100.0);
+        glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spot_direction);
+        glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 50);
+        
+        glDisable(GL_LIGHTING);
+            glPointSize(15);
+            glColor3f(1.0,1.0,0.0);
+            glBegin(GL_POINTS);
+                glVertex3f(light1_position[0],light1_position[1],light1_position[2]);
+            glEnd();  
+            
+        glEnable(GL_LIGHT1);       
+        glEnable(GL_LIGHTING);
+
+        // GLfloat target[3] = { 0.0f, 0.0f, 0.0f };
+        // GLfloat color[3] = { 1.0f, 1.0f, 1.0f };
+        // GLfloat cutoff(5.0f);
+        // GLfloat exponent(15.0f);
+        // GLfloat direction[3];
+        // GLfloat position[4] = { lutador.GetX(), lutador.GetY(), lutador.GetZ(), 0.0f };
+
+        // direction[0] = target[0] - lutador.GetX();
+        // direction[1] = target[1] - lutador.GetY();
+        // direction[2] = target[2] - lutador.GetZ();  
+
+        // glEnable(GL_LIGHT1);
+
+        // glLightfv(GL_LIGHT1, GL_DIFFUSE, color);
+        // glLightfv(GL_LIGHT1, GL_SPECULAR, color);
+        // glLightfv(GL_LIGHT1, GL_POSITION, position);
+
+        // glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, direction);
+        // glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, cutoff);
+        // glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, exponent);
+        // glEnable(GL_LIGHTING);
+
+    }
 }
 
 void Util::DrawAxes(double size)

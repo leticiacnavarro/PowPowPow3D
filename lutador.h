@@ -60,12 +60,17 @@ class Lutador
 
     //Proporcao
     GLfloat gProporcao;
-
+    
     //Bot
     bool gBot;
 
     //Andar
     GLuint posicao;
+
+    //Soco
+    GLuint socoAux = 0;
+    GLfloat valorAnterior = 0;
+   
 private:
     void DesenhaLutador(GLfloat x, GLfloat y);
 
@@ -161,6 +166,12 @@ public:
     GLfloat GetYFromMesh(GLfloat meshpoint);
 
     GLfloat GetZFromMesh(GLfloat meshpoint);
+
+    GLfloat GetXFromRealMesh(GLfloat meshpoint);
+
+    GLfloat GetYFromRealMesh(GLfloat meshpoint);
+
+    GLfloat GetZFromRealMesh(GLfloat meshpoint);
 
     void DirecaoPrimeiraPessoa(GLfloat dY, GLfloat ponto[3]);
 

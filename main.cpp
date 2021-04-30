@@ -161,8 +161,7 @@ void init(void)
     ResetKeyStatus();
     glEnable(GL_TEXTURE_2D);
     glShadeModel (GL_SMOOTH);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
+  //  glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
 
     lutador.CarregaTexturas();
@@ -334,7 +333,6 @@ void mouseArrasta(int x, int y)
         if(VerificaSeEstaAndando())
         {
         GLfloat distanciaPercorrida = abs(x - pontoCentral);
-
         if(distanciaPercorrida > WidthHalf)
         {
             distanciaPercorrida = WidthHalf;
