@@ -2,13 +2,111 @@
 #include "ringue.h"
 #include <math.h>
 
+GLfloat DistanciaPontos(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)
+{
+    GLfloat distanciaPontos = pow((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) ,0.5);
+    return distanciaPontos;
+}
+
+void GetVectorMiddle(GLfloat a[3], GLfloat b[3], GLfloat c[3]){    
+
+    c[0] = a[0] - b[0];
+    c[1] = a[1] - b[1];
+    c[2] = a[2] - b[2];
+
+    c[0] = c[0]/2;
+    c[1] = c[1]/2;
+    c[2] = c[2]/2;
+
+    c[0] = c[0] + b[0];
+    c[1] = c[1] + b[1];
+    c[2] = c[2] + b[2];
+}
+
+
+void Lutador::DesenhaEsferaCabeca(){
+
+    GLfloat pontoX = gMesh.vertsPos[pontoOlho].x;
+    GLfloat pontoY = gMesh.vertsPos[pontoOlho].y;
+
+    GLfloat a[3] = { GetXFromRealMesh(pontoOlho), GetYFromRealMesh(pontoOlho), GetZFromRealMesh(pontoOlho)};
+    GLfloat b[3] = { GetXFromRealMesh(pontoCabecaAtras), GetYFromRealMesh(pontoCabecaAtras), GetZFromRealMesh(pontoCabecaAtras)};
+    GLfloat c[3];
+
+    GetVectorMiddle(a, b, c);
+    GLfloat raio = DistanciaPontos(a[0], a[1], b[0], b[1]);
+    glPushMatrix();
+        glTranslatef(pontoX, pontoY, c[2]);
+        glutSolidSphere (raio, 20, 16);
+    glPopMatrix();
+
+
+
+    GLfloat pontoMao;
+    GLfloat pontoPulso;    
+
+    pontoMao = pontoMaoDireita;
+    pontoPulso = pontoPulsoDireito;
+
+
+    GLfloat maoA[3] = { GetXFromRealMesh(pontoMao), GetYFromRealMesh(pontoMao), GetZFromRealMesh(pontoMao)};
+    GLfloat maoB[3] = { GetXFromRealMesh(pontoPulso), GetYFromRealMesh(pontoPulso), GetZFromRealMesh(pontoPulso)};
+    GLfloat maoC[3];
+    GetVectorMiddle(maoA, maoB, maoC);
+    GLfloat pontoX2 = gMesh.vertsPos[pontoMao].x;
+    GLfloat pontoY2 = gMesh.vertsPos[pontoMao].y;
+    GLfloat raio2 = DistanciaPontos(maoA[0], maoA[1], maoB[0], maoB[1]);
+
+    glPushMatrix();
+        glTranslatef(pontoX2, pontoY2, maoC[2]);
+        glutSolidSphere (raio2, 20, 16);
+    glPopMatrix();
+}
+
 void Lutador::DesenhaMesh()
 {
     glPushMatrix();
-        //glScaled(5, 5, 5);
+     //   glScaled(5, 5, 5);
         gMesh.draw();
     glPopMatrix();
 
+}
+
+GLfloat Lutador::RaioSombra()
+{
+    GLfloat pontoX = gMesh.vertsPos[pontoPeEsquerdo].x;
+    GLfloat pontoY = gMesh.vertsPos[pontoPeEsquerdo].y;
+
+    GLfloat pontoX2 = gMesh.vertsPos[pontoPeDireito].x;
+    GLfloat pontoY2 = gMesh.vertsPos[pontoPeDireito].y;
+
+    GLfloat raio = (DistanciaPontos(pontoX, pontoY, pontoX2, pontoY2) * 0.75);
+
+    return raio;
+}
+
+
+void DesenhaCirc(GLint radius, GLfloat R, GLfloat G, GLfloat B)
+{
+    glDisable(GL_LIGHTING);
+     
+   
+    int pts = 50;
+    glColor4f (R, G, B, 0.2);
+
+    for(unsigned int i = 0; i <= pts; ++i ){
+
+        float angle = ( i / (float)pts ) * 3.14159f * 2.0f;
+        float x = radius * sin(angle);
+        float y = radius * cos(angle);
+        
+        glPointSize(3);
+
+        glBegin(GL_POLYGON);
+            glVertex3f(x, y, 0.0f);
+    }
+    glEnd();
+    glEnable(GL_LIGHTING);
 }
 
 GLuint Lutador::LoadTextureRAW( const char * filename )
@@ -50,7 +148,7 @@ void Lutador::CarregaTexturas()
         gMesh.loadTextura(LoadTextureRAW("modelos/girl.bmp")); 
     }
 }
-void Lutador::DesenhaLutador(GLfloat x, GLfloat y)
+void Lutador::DesenhaLutador(GLfloat x, GLfloat y, bool modoNoturno)
 {
     glPushMatrix();
     glTranslatef(x, y, 0);
@@ -58,8 +156,12 @@ void Lutador::DesenhaLutador(GLfloat x, GLfloat y)
     glRotatef(gGiro, 0, 0, 1);
     GLuint textureSun;
 
+    if(modoNoturno){
+        DesenhaCirc(raioSombra, 1, 1, 1);
+    }
 
-    DesenhaMesh();        
+    DesenhaMesh();    
+ //   DesenhaEsferaCabeca();
 
     glPopMatrix();
 }
@@ -173,67 +275,62 @@ void Lutador::DirecaoPrimeiraPessoa(GLfloat dY, GLfloat ponto[3])
 
 }
 
-GLfloat DistanciaPontos(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)
+
+
+bool Lutador::AcertouCabeca(int braco, Lutador inimigo)
 {
-    GLfloat distanciaPontos = pow((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) ,0.5);
-    return distanciaPontos;
-}
-
-bool Lutador::AcertouCabeca(GLfloat inimigox, GLfloat inimigoy, int braco)
-{
-
-    GLfloat angulo1;
-    GLfloat angulo2;
-    GLfloat distBraco;
-       
-
-    if(braco == 1)
-    {
-        angulo1 = gThetaDireito2;
-        angulo2 = gThetaDireito1;
-        distBraco = rCabeca;
-    }
-
-    else
-    {
-        angulo1 = gThetaEsquerdo2;
-        angulo2 = gThetaEsquerdo1;
-        distBraco = -rCabeca;
-    }
-
-        GLfloat xOut;
-        GLfloat yOut;
     
-        GLfloat xAux = 0;
-        GLfloat yAux = rMao + bracoHeight;
+    GLfloat pontoMao;
+    GLfloat pontoPulso;    
 
-        GLfloat distanciaSoco =  rMao + rCabeca;            
+    if(braco == 1){
+        pontoMao = pontoMaoDireita;
+        pontoPulso = pontoPulsoDireito;
+    }
+    else{
+        pontoMao = pontoMaoEsquerda;
+        pontoPulso = pontoPulsoEsquerdo;
+    }
+
+    GLfloat maoA[3] = { GetXFromRealMesh(pontoMao), GetYFromRealMesh(pontoMao), GetZFromRealMesh(pontoMao)};
+    GLfloat maoB[3] = { GetXFromRealMesh(pontoPulso), GetYFromRealMesh(pontoPulso), GetZFromRealMesh(pontoPulso)};
+    GLfloat maoC[3];
 
 
-        RotatePoint(xAux, yAux, angulo1, xOut, yOut);
 
-        xAux = xOut;
-        yAux = yOut + bracoHeight;
+    GLfloat cabecaA[3] = { inimigo.GetXFromRealMesh(pontoOlho), inimigo.GetYFromRealMesh(pontoOlho), inimigo.GetZFromRealMesh(pontoOlho)};
+    GLfloat cabecaB[3] = { inimigo.GetXFromRealMesh(pontoCabecaAtras), inimigo.GetYFromRealMesh(pontoCabecaAtras), inimigo.GetZFromRealMesh(pontoCabecaAtras)};
+    GLfloat cabecaC[3];
+    
+    GetVectorMiddle(cabecaB, cabecaA, cabecaC);
+    GetVectorMiddle(maoA, maoB, maoC);
+    
+    GLfloat pontoX = gMesh.vertsPos[pontoMao].x;
+    GLfloat pontoY = gMesh.vertsPos[pontoMao].y;
 
-        RotatePoint(xAux, yAux, angulo2, xOut, yOut);
+    GLfloat pontoX2 = inimigo.gMesh.vertsPos[pontoOlho].x;
+    GLfloat pontoY2 = inimigo.gMesh.vertsPos[pontoOlho].y;
 
-        xAux = xOut + distBraco;
-        yAux = yOut;
+    cabecaC[0] = cabecaC[0];
+    cabecaC[1] = cabecaC[1];   
+    cabecaC[2] = cabecaC[2];
 
-        RotatePoint(xAux, yAux, gGiro, xOut, yOut);    
+    // maoC[0] = maoC[0] + GetX();
+    // maoC[1] = maoC[1] + GetY();   
+    // maoC[2] = maoC[2] + GetZ();
 
-        xAux = xOut + gX;
-        yAux = yOut + gY;
+    // cout << "cabecaC X: " << cabecaC[0] <<" - y: " << cabecaC[1] <<endl;
+    // cout << "maoC X: " << maoC[0] <<" - y: " << maoC[1] << endl;
+    GLfloat dist = DistanciaPontos(cabecaA[0], cabecaA[1], cabecaB[0], cabecaB[1]);
+    GLfloat raioMinimo = dist + (dist/2);
+    GLfloat distanciaMaoCabeca = DistanciaPontos(maoC[0], maoC[1], cabecaC[0], cabecaC[1]);
+    // cout << "distanciaMaoCabeca " << distanciaMaoCabeca << endl;
+    // cout << "raioMinimo " << raioMinimo << endl;
+    if(raioMinimo > distanciaMaoCabeca){
 
-        GLfloat distanciaPontos =  DistanciaPontos(xAux, yAux, inimigox, inimigoy);            
-
-      //  printf("Distancia Soco %0.2f  \n", distanciaSoco);
-      //  printf("Distancia Pontos %0.2f  \n", distanciaPontos);
-
-    if(distanciaPontos < distanciaSoco){
         return true;
-    }
-    
+    }    
+   
     return false;
 }
 
@@ -242,7 +339,7 @@ bool Lutador::VerificaSePode(GLfloat dY, GLfloat xArena, GLfloat yArena, GLfloat
     GLfloat xOut;
     GLfloat yOut;
 
-    DirecaoNariz(rCabeca, gGiro, gX, gY, xOut, yOut, dY);
+    DirecaoNariz(raioSombra, gGiro, gX, gY, xOut, yOut, dY);
 
     GLfloat yColisaoLutador = gY + dY + (rCabeca * 3);
     GLfloat xColisaoLutador = gX + (rCabeca * 3);
@@ -250,8 +347,8 @@ bool Lutador::VerificaSePode(GLfloat dY, GLfloat xArena, GLfloat yArena, GLfloat
     GLfloat distanciaPontos = DistanciaPontos(xOut, yOut, xLutador2, yLutador2);
     GLfloat distancia = raioColisao * 3.5;
 
-    yArena = ladoRingue - raioColisao;
-    xArena = ladoRingue - raioColisao;
+    yArena = (yArena / 2) - raioSombra;
+    xArena = (xArena / 2) - raioSombra;
 
     if(yOut > (yArena))
         return false;
@@ -287,9 +384,7 @@ void Lutador::SocaBracoEsquerdo(GLfloat angulo1, GLfloat angulo2){
     gThetaEsquerdo2 = angulo2;
 }
 
-bool Lutador::Soca(GLfloat distanciaTotal, GLfloat distanciaPercorrida, GLint braco, GLfloat inimigox, GLfloat inimigoy){
-    cout << "socoAux: " << socoAux << endl;
-
+bool Lutador::Soca(GLfloat distanciaTotal, GLfloat distanciaPercorrida, GLint braco, Lutador inimigo){
 
     if(socoAux > framesSoco){
 
@@ -317,20 +412,11 @@ bool Lutador::Soca(GLfloat distanciaTotal, GLfloat distanciaPercorrida, GLint br
         objFrame = "modelos/esquerdo/esquerdo_0000" + frame + ".obj";
     }
 
-   // cout << contagem <<  endl;
-  //   cout << "distanciaPercorrida " << distanciaPercorrida <<  endl;
-    // cout << "distanciaTotal " << distanciaTotal <<  endl;
-
-    // cout << "contagem " << contagem <<  endl;
-
     gMesh.loadMesh(objFrame);
 
-    // bool fezPonto = AcertouCabeca(inimigox, inimigoy, braco);
+    bool fezPonto = AcertouCabeca(braco, inimigo);
     
-    if(contagem >= 17){
-        return true;
-    }
-    return false;
+    return fezPonto;
 }
 
 
@@ -395,32 +481,33 @@ void Lutador::GiraSozinho(GLfloat inc, GLfloat xLutador, GLfloat yLutador)
 
     gGiro = anguloLutador;
 }
-GLfloat Lutador::GetXFromMesh(GLfloat meshpoint){
-   // cout << "x" << gMesh.vertsPos[meshpoint].z << endl;
-
-    return gMeshInglesVer.vertsPos[meshpoint].x + gX;
+GLfloat Lutador::GetXFromMesh(GLfloat meshpoint)
+{
+    GLfloat point = RotateX(gMeshInglesVer.vertsPos[meshpoint].x, gMeshInglesVer.vertsPos[meshpoint].y, gGiro);
+    return point + gX;
 }
-GLfloat Lutador::GetYFromMesh(GLfloat meshpoint){
-     //   cout << "y" << gMesh.vertsPos[meshpoint].z << endl;
+GLfloat Lutador::GetYFromMesh(GLfloat meshpoint)
+{
+    GLfloat point = RotateY(gMeshInglesVer.vertsPos[meshpoint].x, gMeshInglesVer.vertsPos[meshpoint].y, gGiro);
+    return point + gY;}
 
-    return gMeshInglesVer.vertsPos[meshpoint].y + gY;
-}
-GLfloat Lutador::GetZFromMesh(GLfloat meshpoint){
-   // cout << "z" << gMesh.vertsPos[meshpoint].z << endl;
+GLfloat Lutador::GetZFromMesh(GLfloat meshpoint)
+{
     return gMeshInglesVer.vertsPos[meshpoint].z + gZ;
 }
-GLfloat Lutador::GetXFromRealMesh(GLfloat meshpoint){
-   // cout << "x" << gMesh.vertsPos[meshpoint].z << endl;
+
+GLfloat Lutador::GetXFromRealMesh(GLfloat meshpoint)
+{
     GLfloat point = RotateX(gMesh.vertsPos[meshpoint].x, gMesh.vertsPos[meshpoint].y, gGiro);
     return point + gX;
 }
-GLfloat Lutador::GetYFromRealMesh(GLfloat meshpoint){
-     //   cout << "y" << gMesh.vertsPos[meshpoint].z << endl;
+GLfloat Lutador::GetYFromRealMesh(GLfloat meshpoint)
+{
     GLfloat point = RotateY(gMesh.vertsPos[meshpoint].x, gMesh.vertsPos[meshpoint].y, gGiro);
     return point + gY;
 }
-GLfloat Lutador::GetZFromRealMesh(GLfloat meshpoint){
-   // cout << "z" << gMesh.vertsPos[meshpoint].z << endl;
+GLfloat Lutador::GetZFromRealMesh(GLfloat meshpoint)
+{
     return gMesh.vertsPos[meshpoint].z + gZ;
 
 }

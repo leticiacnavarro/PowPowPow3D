@@ -116,10 +116,10 @@ void Menu::CalculaPosicao(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)
 {
     //cout << "gXLutador: " << x1 << "gYLutador: " << gYLutador << endl;
 
-    gXLutador = (x1 * 0.25)/(ladoRingue)/2;
-    gYLutador = (y1 * 0.25)/(ladoRingue) /2;
-    gXBot = (x2 * 0.25)/(ladoRingue)/2;
-    gYBot = (y2 * 0.25)/(ladoRingue)/2;
+    gXLutador = (x1 * 0.25)/(gX)/2;
+    gYLutador = (y1 * 0.25)/(gX) /2;
+    gXBot = (x2 * 0.25)/(gX)/2;
+    gYBot = (y2 * 0.25)/(gX)/2;
 
 }
 

@@ -56,7 +56,7 @@ public:
 
     void IniciaLutadores(Lutador &lutador, Lutador &bot);
 
-    void IniciaArena(GLint &widthArena, GLint &heightarena, GLint &widthHalfArena, GLint &heightHalfarena);
+    void IniciaArena(GLint &widthArena, GLint &heightarena, GLint &widthHalfArena, GLint &heightHalfarena, Ringue &ringue);
 
     void TipoJogo(bool &modoTreino);
 

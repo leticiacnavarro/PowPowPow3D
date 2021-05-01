@@ -16,10 +16,22 @@ using namespace std;
 #define raioColisao 10
 
 #define pontoOlho 2833
-#define pontoBraco 2718
+#define pontoBraco 1833
 #define pontoBarriga 1882
+#define pontoCabecaAtras 195
 
-#define framesSoco 16
+#define pontoMaoDireita 2168
+#define pontoPulsoDireito 2047
+
+#define pontoMaoEsquerda 3461
+#define pontoPulsoEsquerdo 3530
+
+#define pontoMeioCabeca 649
+
+#define pontoPeEsquerdo 1024
+#define pontoPeDireito 1424
+
+#define framesSoco 31
 #define framesAnda 31
 
 using namespace std;
@@ -70,11 +82,13 @@ class Lutador
     //Soco
     GLuint socoAux = 0;
     GLfloat valorAnterior = 0;
+
+    GLfloat raioSombra;
    
 private:
-    void DesenhaLutador(GLfloat x, GLfloat y);
+    void DesenhaLutador(GLfloat x, GLfloat y, bool modoNoturno);
 
-    bool AcertouCabeca(GLfloat inimigox, GLfloat inimigoy, int braco);
+    bool AcertouCabeca(int braco, Lutador inimigo);
 
     void SocaBracoDireito(GLfloat angulo1, GLfloat angulo2);
 
@@ -82,6 +96,10 @@ private:
 
     void DesenhaMesh();
     
+    void DesenhaEsferaCabeca();
+
+    GLfloat RaioSombra();
+
     GLuint LoadTextureRAW( const char * filename );
 
 public:
@@ -137,6 +155,8 @@ public:
         gMesh.loadMesh("modelos/walking/walking_000001.obj");
         gMeshInglesVer.loadMesh("modelos/girl.obj");
 
+        raioSombra = RaioSombra();
+
     };
 
     GLfloat GetX();
@@ -145,15 +165,15 @@ public:
 
     GLfloat GetZ();
 
-    void Desenha(){
-        DesenhaLutador(gX, gY);
+    void Desenha(bool modoNoturno){
+        DesenhaLutador(gX, gY, modoNoturno);
     }
 
     void Gira(GLfloat inc);
     
     void Anda(GLfloat dY);
     
-    bool Soca(GLfloat distanciaTotal, GLfloat distanciaPercorrida, GLint braco, GLfloat inimigox, GLfloat inimigoy);
+    bool Soca(GLfloat distanciaTotal, GLfloat distanciaPercorrida, GLint braco, Lutador inimigo);
     
     void ParaDeSocar();
 

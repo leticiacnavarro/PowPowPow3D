@@ -7,10 +7,9 @@
 
 using namespace std;
 
-#define thetaInicial1 135
-#define thetaInicial2 225
+#define pontoBase1 1972
+#define pontoBase2 2758
 
-#define ladoRingue 180
 #define profundidade 60
 #include "objloader.h"
 
@@ -27,17 +26,26 @@ class Ringue
     //Proporcao
     GLfloat gProporcao;
 
+
+
 private:
     void DesenhaRingue();
 
-public:
+    void DefineTamanhoLado();
 
-    Ringue(){
+public:
+    //Tamanho
+    int lado;
+    Ringue()
+    {
+        gMesh.loadMesh("modelos/boxingRing.obj");
+        DefineTamanhoLado();
     }
 
-    void Iniciacao(GLfloat x, GLfloat y, GLfloat proporcao){
+    void Iniciacao(GLfloat x, GLfloat y){
         
-    gMesh.loadMesh("modelos/ringue.obj");
+        gProporcao = x/lado;
+        cout << gProporcao << endl;
 
     };
 

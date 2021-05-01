@@ -1,6 +1,6 @@
+#include "ringue.h"
 #include "iniciacao.h"
 #include "tinyxml/tinyxml.h"
-#include "ringue.h"
 
 #include <math.h>
 
@@ -143,24 +143,26 @@ void Iniciacao::ProcessaLutadores(TiXmlElement *lutador1, TiXmlElement *lutador2
 
 void Iniciacao::IniciaLutadores(Lutador &lutador, Lutador &bot)
 {    
-    gXLutador = (ladoRingue * gXLutador)/width;
-    gYLutador = (ladoRingue * gYLutador)/width;
+    // gXLutador = (ladoRingue * gXLutador)/width;
+    // gYLutador = (ladoRingue * gYLutador)/width;
 
-    gXBot = (ladoRingue * gXBot)/width;
-    gYBot = (ladoRingue * gYBot)/width;
+    // gXBot = (ladoRingue * gXBot)/width;
+    // gYBot = (ladoRingue * gYBot)/width;
     lutador.Iniciacao(gXLutador, gYLutador, 0, gGiroLutador, rCabecaLutador, false);
 
  //   lutador.Iniciacao(0,0, 0, gGiroLutador, rCabecaLutador, false);
     bot.Iniciacao(gXBot, gYBot, 0, gGiroBot, rCabecaBot, true);
 }
 
-void Iniciacao::IniciaArena(GLint &widthArena, GLint &heightArena, GLint &widthHalfArena, GLint &heightHalfarena)
+void Iniciacao::IniciaArena(GLint &widthArena, GLint &heightArena, GLint &widthHalfArena, GLint &heightHalfarena, Ringue &ringue)
 {
     widthArena = width;
     heightArena = height;
 
     widthHalfArena = widthHalf;
     heightHalfarena = heightHalf;
+
+    ringue.Iniciacao(widthArena, heightArena);
 
 }
 bool Iniciacao::ProcessaArquivo(char* nomeArquivo)

@@ -5,11 +5,11 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include "ringue.h"
 #include "lutador.h"
 #include "iniciacao.h"
 #include "menu.h"
 #include "util.h"
-#include "ringue.h"
 
 #define INC_KEY 1
 #define INC_KEYIDLE 0.1
@@ -72,7 +72,7 @@ void renderScene(void)
     
     if(pontoLutador < 10 && pontoBot < 10)
     {    
-                        menu.DesenhaMiniMapa(lutador.GetX(), lutador.GetY(), bot.GetX(), bot.GetY());
+        menu.DesenhaMiniMapa(lutador.GetX(), lutador.GetY(), bot.GetX(), bot.GetY());
 
         menu.DesenhaPlacar(pontoLutador, pontoBot);
 
@@ -80,9 +80,9 @@ void renderScene(void)
    //     util.DrawAxes(50);
         ringue.Desenha();
         util.Iluminacao(lutador, bot, toggleLight);
-        bot.Desenha();
+        bot.Desenha(toggleLight);
 
-        lutador.Desenha();
+        lutador.Desenha(toggleLight);
        
     }
     else if(pontoLutador >= pontoBot)
@@ -192,7 +192,7 @@ void movimentaBot(double inc)
     else
     {
         //distanciaSoco += inc;
-        bool acertou = bot.Soca(distanciaSocoTotal, distanciaSoco, braco, lutador.GetX(), lutador.GetY());
+        bool acertou = bot.Soca(distanciaSocoTotal, distanciaSoco, braco, lutador);
         if(acertou)
         {
             if(parouDeSocarBot)
@@ -339,8 +339,8 @@ void mouseArrasta(int x, int y)
         }
         
         if(x > pontoCentral){
-
-            bool acertou = lutador.Soca(WidthHalf, distanciaPercorrida, 1, bot.GetX(), bot.GetY());
+           //   cout << "socando" << endl;
+            bool acertou = lutador.Soca(WidthHalf, distanciaPercorrida, 1, bot);
             if(acertou)
             {
                 if(parouDeSocarLutador)
@@ -355,7 +355,7 @@ void mouseArrasta(int x, int y)
         }
         else if(x < pontoCentral)
         {
-            bool acertou = lutador.Soca(WidthHalf, distanciaPercorrida, 2, bot.GetX(), bot.GetY());
+            bool acertou = lutador.Soca(WidthHalf, distanciaPercorrida, 2, bot);
             if(acertou)
             {
                 if(parouDeSocarLutador)
@@ -400,13 +400,13 @@ void Inicializa(char *caminhoArquivo)
     }
 
     
-    iniciacao.IniciaArena(Width, Height, WidthHalf, HeightHalf);
+    iniciacao.IniciaArena(Width, Height, WidthHalf, HeightHalf, ringue);
     iniciacao.IniciaLutadores(lutador, bot);
     iniciacao.TipoJogo(modoTreino);
 
     menu.Iniciacao(Width, Height); 
 
-    ringue.Iniciacao(Width, Height, 3);  
+    // ringue.Iniciacao(Width, Height, 3);  
      
 }
 

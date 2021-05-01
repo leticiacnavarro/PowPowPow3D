@@ -28,12 +28,12 @@ public:
     GLint lastY = 0;
 
     GLint zoom = 120;
-    GLint camAngle = 60;
+    GLint camAngle = 75;
 
     GLfloat camYXAngle = -192;
     GLfloat camYZAngle = 67;
 
-    GLfloat zNear = 50;
+    GLfloat zNear = 8;
     GLfloat zFar = 1000;
 
     void ProcessaCamera(int toggle, Lutador &lutador);
