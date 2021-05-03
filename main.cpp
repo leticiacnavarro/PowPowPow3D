@@ -60,12 +60,27 @@ int toggleCam = 0;
 bool toggleLight = false;
 int buttonDown = 0;
 
+void changeCamera(int angle, int zNear, int zFar)
+{
+    glMatrixMode (GL_PROJECTION);
+
+    glLoadIdentity ();
+
+    gluPerspective (angle, Width / Height, zNear, zFar);
+
+    glMatrixMode (GL_MODELVIEW);
+        glutPostRedisplay();
+}
+
+
 void renderScene(void)
 {
     
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity(); 
-    glClearColor(0.692,	0.852,	0.988, 1.0f); // Black, no opacity(alpha).
+  //  glClearColor(0.692,	0.852,	0.988, 1.0f); // Black, no opacity(alpha).
+    glClearColor(0,0,0, 1.0f); // Black, no opacity(alpha).
+
     glClear (   GL_COLOR_BUFFER_BIT | 
                 GL_DEPTH_BUFFER_BIT);
 
@@ -109,12 +124,16 @@ void keyPress(unsigned char key, int x, int y)
             break;
         case '1':
             toggleCam = 0;
+            changeCamera(util.GetCamAngle(), 15, 1000);
             break;
         case '2':
             toggleCam = 1;
+            changeCamera(util.GetCamAngle(), 8, 1000);
             break;
         case '3':
             toggleCam = 2;
+            changeCamera(util.GetCamAngle(), 5, 1000);
+
             break;
         case 'n':
         case 'N':
@@ -264,7 +283,7 @@ void idle(void)
         {
             if(lutador.VerificaSePode(inc, Width, Height, bot.GetX(), bot.GetY()))
             {
-                        lutador.ParaDeSocar();
+                lutador.ParaDeSocar();
 
                 lutador.Anda(inc);
 
@@ -274,7 +293,7 @@ void idle(void)
         {
             if(lutador.VerificaSePode(-inc, Width, Height, bot.GetX(), bot.GetY()))
             {
-                        lutador.ParaDeSocar();
+                lutador.ParaDeSocar();
 
                 lutador.Anda(-inc);
 
@@ -282,13 +301,13 @@ void idle(void)
         }  
         if(keyStatus[(int)('a')])
         {    
-                    lutador.ParaDeSocar();
+            lutador.ParaDeSocar();
         
             lutador.Gira(inc);
         }
         if(keyStatus[(int)('d')])
         {
-                    lutador.ParaDeSocar();
+            lutador.ParaDeSocar();
 
             lutador.Gira(-inc);
         }
@@ -401,7 +420,7 @@ void Inicializa(char *caminhoArquivo)
 
     
     iniciacao.IniciaArena(Width, Height, WidthHalf, HeightHalf, ringue);
-    iniciacao.IniciaLutadores(lutador, bot);
+    iniciacao.IniciaLutadores(lutador, bot, ringue);
     iniciacao.TipoJogo(modoTreino);
 
     menu.Iniciacao(Width, Height); 
@@ -410,24 +429,11 @@ void Inicializa(char *caminhoArquivo)
      
 }
 
-void changeCamera(int angle, int w, int h)
-{
-    glMatrixMode (GL_PROJECTION);
-
-    glLoadIdentity ();
-
-    gluPerspective (angle, Width / Height, util.zNear, util.zFar);
-
-    glMatrixMode (GL_MODELVIEW);
-        glutPostRedisplay();
-
-}
 
 void reshape (int w, int h) {
 
     glViewport (0, 0, (GLsizei)w, (GLsizei)h);
-
-    changeCamera(util.GetCamAngle(), w, h);
+    changeCamera(util.GetCamAngle(), 15, 1000);
 }
 
 

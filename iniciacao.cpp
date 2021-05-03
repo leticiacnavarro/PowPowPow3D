@@ -141,16 +141,27 @@ void Iniciacao::ProcessaLutadores(TiXmlElement *lutador1, TiXmlElement *lutador2
     CalculaCoeficienteCabecas();       
 }
 
-void Iniciacao::IniciaLutadores(Lutador &lutador, Lutador &bot)
-{    
-    // gXLutador = (ladoRingue * gXLutador)/width;
-    // gYLutador = (ladoRingue * gYLutador)/width;
+// GLfloat RegulaPosicao(GLfloat raioSombra, GLfloat width, GLfloat g)
+// {
+//     GLfloat arena = (width / 2) - (raioSombra/2);
 
-    // gXBot = (ladoRingue * gXBot)/width;
-    // gYBot = (ladoRingue * gYBot)/width;
+//     if(g > (arena))
+//         return arena;
+    
+//     if(g < -(arena))
+//         return -arena;
+
+//     if(g > (arena))
+//         return arena;
+    
+//     if(g < -(arena))
+//         return -arena;
+// }
+
+void Iniciacao::IniciaLutadores(Lutador &lutador, Lutador &bot, Ringue &ringue)
+{
+
     lutador.Iniciacao(gXLutador, gYLutador, 0, gGiroLutador, rCabecaLutador, false);
-
- //   lutador.Iniciacao(0,0, 0, gGiroLutador, rCabecaLutador, false);
     bot.Iniciacao(gXBot, gYBot, 0, gGiroBot, rCabecaBot, true);
 }
 

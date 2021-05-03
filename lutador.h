@@ -43,6 +43,7 @@ class Lutador
     GLfloat rCabeca;
     GLfloat rNariz;
     GLfloat rMao;
+    GLfloat altura;
 
     GLfloat bracoHeight;
     GLfloat bracoWidth;
@@ -50,11 +51,11 @@ class Lutador
     // Angulos
     GLfloat gGiro;
 
-    GLfloat gThetaDireito1;
-    GLfloat gThetaDireito2;
+    // GLfloat gThetaDireito1;
+    // GLfloat gThetaDireito2;
 
-    GLfloat gThetaEsquerdo1;
-    GLfloat gThetaEsquerdo2;
+    // GLfloat gThetaEsquerdo1;
+    // GLfloat gThetaEsquerdo2;
 
     //Posições
     GLfloat gX;
@@ -83,7 +84,6 @@ class Lutador
     GLuint socoAux = 0;
     GLfloat valorAnterior = 0;
 
-    GLfloat raioSombra;
    
 private:
     void DesenhaLutador(GLfloat x, GLfloat y, bool modoNoturno);
@@ -97,6 +97,8 @@ private:
     void DesenhaMesh();
     
     void DesenhaEsferaCabeca();
+
+    void CalculaAlturaLutador();
 
     GLfloat RaioSombra();
 
@@ -130,11 +132,11 @@ public:
         rNariz = rCabeca/3;
         rMao = rCabeca/2;
 
-        gThetaDireito1 = thetaInicial2;
-        gThetaDireito2 = thetaInicial1;
+        // gThetaDireito1 = thetaInicial2;
+        // gThetaDireito2 = thetaInicial1;
 
-        gThetaEsquerdo1 = thetaInicial1;
-        gThetaEsquerdo2 = thetaInicial2;
+        // gThetaEsquerdo1 = thetaInicial1;
+        // gThetaEsquerdo2 = thetaInicial2;
 
         gBot = bot;
 
@@ -157,6 +159,9 @@ public:
 
         raioSombra = RaioSombra();
 
+        gProporcao = rCabeca/raioSombra;
+        
+        CalculaAlturaLutador();
     };
 
     GLfloat GetX();
@@ -192,10 +197,19 @@ public:
     GLfloat GetYFromRealMesh(GLfloat meshpoint);
 
     GLfloat GetZFromRealMesh(GLfloat meshpoint);
+    
+    GLfloat GetXMeshPuro(GLfloat meshpoint);
+
+    GLfloat GetYMeshPuro(GLfloat meshpoint);
+
+    GLfloat GetZMeshPuro(GLfloat meshpoint);
 
     void DirecaoPrimeiraPessoa(GLfloat dY, GLfloat ponto[3]);
 
     void CarregaTexturas();
+
+    GLfloat raioSombra;
+
 };
 
 #endif	/* LUTADOR_H */

@@ -33,7 +33,7 @@ public:
     GLfloat camYXAngle = -192;
     GLfloat camYZAngle = 67;
 
-    GLfloat zNear = 8;
+    GLfloat zNear = 10;
     GLfloat zFar = 1000;
 
     void ProcessaCamera(int toggle, Lutador &lutador);

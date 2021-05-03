@@ -7,8 +7,11 @@
 
 using namespace std;
 
-#define pontoBase1 1972
-#define pontoBase2 2758
+#define pontoBaseInterno1 1972
+#define pontoBaseInterno2 2758
+
+#define pontoBase1 1391
+#define pontoBase2 2085
 
 #define profundidade 60
 #include "objloader.h"
@@ -32,26 +35,31 @@ private:
     void DesenhaRingue();
 
     void DefineTamanhoLado();
+    
+    void DefineTamanhoLadoTotal();
+
 
 public:
     //Tamanho
     int lado;
+    int ladoTotal;
+
     Ringue()
     {
         gMesh.loadMesh("modelos/boxingRing.obj");
         DefineTamanhoLado();
+        DefineTamanhoLadoTotal();
     }
 
     void Iniciacao(GLfloat x, GLfloat y){
-        
-        gProporcao = x/lado;
-        cout << gProporcao << endl;
 
+        gProporcao = x/lado;
     };
 
     void Desenha(){
         DesenhaRingue();
     }
+    GLfloat LadoColisao();
 
 };
 

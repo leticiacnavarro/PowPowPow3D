@@ -36,9 +36,6 @@ GLint Util::GetCamAngle(){
 
 void Util::CameraPrimeiraPessoa(Lutador &lutador){
 
-    zNear = 50;
-    zFar = 100;
-
     int ponto = pontoOlho; 
 
     GLfloat pontoFoco[3];
@@ -52,21 +49,19 @@ void Util::CameraPrimeiraPessoa(Lutador &lutador){
 
 void Util::CameraPulso(Lutador &lutador)
 {
-    zNear = 500;
-    zFar = 1000;
-
     int ponto = pontoBraco; 
     int ponto2 = pontoMaoDireita; 
     
-    GLfloat braco[3] = {lutador.GetXFromRealMesh(ponto), lutador.GetYFromRealMesh(ponto), lutador.GetZFromRealMesh(ponto)};
-    GLfloat mao[3] = {lutador.GetXFromRealMesh(ponto2), lutador.GetYFromRealMesh(ponto2), lutador.GetZFromRealMesh(ponto2)};
+    GLfloat braco[3] = {lutador.GetXMeshPuro(ponto), lutador.GetYMeshPuro(ponto), lutador.GetZMeshPuro(ponto)};
+    GLfloat mao[3] = {lutador.GetXMeshPuro(ponto2), lutador.GetYMeshPuro(ponto2), lutador.GetZMeshPuro(ponto2)};
+
 
     normalize(braco);
     normalize(mao);
     GLfloat up[3];
 
     cross(mao, braco, up);
-    cout << "up: " << up[0] << "-" << up[1] << "-" << up[2] << endl;
+
     GLfloat pontoFoco[3];
     GLfloat pontoOrigem[3];
 
@@ -75,15 +70,11 @@ void Util::CameraPulso(Lutador &lutador)
 
     gluLookAt(lutador.GetXFromRealMesh(ponto), lutador.GetYFromRealMesh(ponto), lutador.GetZFromRealMesh(ponto),
                 pontoFoco[0], pontoFoco[1], lutador.GetZFromRealMesh(ponto), 
-                up[2],up[0],up[1]);
+                0,0,1);
 
 
 }
 void Util::CameraSuperior(Lutador &lutador){
-
-
-    zNear = 0;
-    zFar = 100;
 
     GLfloat s = abs(camYXAngle*M_PI/180);
     GLfloat t = abs(camYZAngle*M_PI/180);

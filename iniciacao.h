@@ -54,7 +54,7 @@ public:
     Iniciacao(){}
     bool ProcessaArquivo(char* nomeArquivo);
 
-    void IniciaLutadores(Lutador &lutador, Lutador &bot);
+    void IniciaLutadores(Lutador &lutador, Lutador &bot, Ringue &ringue);
 
     void IniciaArena(GLint &widthArena, GLint &heightarena, GLint &widthHalfArena, GLint &heightHalfarena, Ringue &ringue);
 

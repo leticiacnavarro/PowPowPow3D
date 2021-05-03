@@ -66,7 +66,7 @@ void Lutador::DesenhaEsferaCabeca(){
 void Lutador::DesenhaMesh()
 {
     glPushMatrix();
-     //   glScaled(5, 5, 5);
+        glScaled(gProporcao, gProporcao, gProporcao);
         gMesh.draw();
     glPopMatrix();
 
@@ -80,7 +80,7 @@ GLfloat Lutador::RaioSombra()
     GLfloat pontoX2 = gMesh.vertsPos[pontoPeDireito].x;
     GLfloat pontoY2 = gMesh.vertsPos[pontoPeDireito].y;
 
-    GLfloat raio = (DistanciaPontos(pontoX, pontoY, pontoX2, pontoY2) * 0.75);
+    GLfloat raio = (DistanciaPontos(pontoX, pontoY, pontoX2, pontoY2));
 
     return raio;
 }
@@ -157,7 +157,7 @@ void Lutador::DesenhaLutador(GLfloat x, GLfloat y, bool modoNoturno)
     GLuint textureSun;
 
     if(modoNoturno){
-        DesenhaCirc(raioSombra, 1, 1, 1);
+        DesenhaCirc((raioSombra * 0.75), 1, 1, 1);
     }
 
     DesenhaMesh();    
@@ -245,7 +245,7 @@ void Lutador::Anda(GLfloat dY)
     GLfloat xOut;
     GLfloat yOut;
  
-    DirecaoNariz(rCabeca, gGiro, gX, gY, xOut, yOut, dY);
+    DirecaoNariz(raioSombra, gGiro, gX, gY, xOut, yOut, dY);
 
     gX = xOut;
     gY = yOut;
@@ -267,7 +267,7 @@ void Lutador::DirecaoPrimeiraPessoa(GLfloat dY, GLfloat ponto[3])
     GLfloat xOut;
     GLfloat yOut;
  
-    DirecaoNariz(rCabeca, gGiro, gX, gY, xOut, yOut, dY);
+    DirecaoNariz(raioSombra, gGiro, gX, gY, xOut, yOut, dY);
 
     ponto[0] = xOut;
     ponto[1] = yOut;
@@ -336,19 +336,27 @@ bool Lutador::AcertouCabeca(int braco, Lutador inimigo)
 
 bool Lutador::VerificaSePode(GLfloat dY, GLfloat xArena, GLfloat yArena, GLfloat xLutador2, GLfloat yLutador2){
  
+    // Quadrado
+    if(xArena > yArena){
+        yArena = xArena;
+    }
+
+    if(yArena > xArena){
+        xArena = yArena;
+    }
     GLfloat xOut;
     GLfloat yOut;
 
     DirecaoNariz(raioSombra, gGiro, gX, gY, xOut, yOut, dY);
 
-    GLfloat yColisaoLutador = gY + dY + (rCabeca * 3);
-    GLfloat xColisaoLutador = gX + (rCabeca * 3);
+    GLfloat yColisaoLutador = gY + dY + (raioSombra * 3);
+    GLfloat xColisaoLutador = gX + (raioSombra * 3);
 
     GLfloat distanciaPontos = DistanciaPontos(xOut, yOut, xLutador2, yLutador2);
     GLfloat distancia = raioColisao * 3.5;
 
-    yArena = (yArena / 2) - raioSombra;
-    xArena = (xArena / 2) - raioSombra;
+    yArena = (yArena / 2) - (raioSombra/2);
+    xArena = (xArena / 2) - (raioSombra/2);
 
     if(yOut > (yArena))
         return false;
@@ -372,17 +380,27 @@ bool Lutador::VerificaSePode(GLfloat dY, GLfloat xArena, GLfloat yArena, GLfloat
     return true;
 }
 
-void Lutador::SocaBracoDireito(GLfloat angulo1, GLfloat angulo2){
-    gThetaDireito1 = angulo1;
-    gThetaDireito2 = angulo2;
+void Lutador::CalculaAlturaLutador(){
 
+    GLfloat z1 = gMesh.vertsPos[pontoMeioCabeca].z;
+    GLfloat z2 = gMesh.vertsPos[pontoPeDireito].z;
+
+    altura = z1 - z2;
+cout << "altura X: " << altura <<endl;
 }
 
 
-void Lutador::SocaBracoEsquerdo(GLfloat angulo1, GLfloat angulo2){
-    gThetaEsquerdo1 = angulo1;
-    gThetaEsquerdo2 = angulo2;
-}
+// void Lutador::SocaBracoDireito(GLfloat angulo1, GLfloat angulo2){
+//     gThetaDireito1 = angulo1;
+//     gThetaDireito2 = angulo2;
+
+// }
+
+
+// void Lutador::SocaBracoEsquerdo(GLfloat angulo1, GLfloat angulo2){
+//     gThetaEsquerdo1 = angulo1;
+//     gThetaEsquerdo2 = angulo2;
+// }
 
 bool Lutador::Soca(GLfloat distanciaTotal, GLfloat distanciaPercorrida, GLint braco, Lutador inimigo){
 
@@ -422,8 +440,8 @@ bool Lutador::Soca(GLfloat distanciaTotal, GLfloat distanciaPercorrida, GLint br
 
 void Lutador::ParaDeSocar()
 {
-    SocaBracoEsquerdo(135, 225);
-    SocaBracoDireito(225, 135);
+    // SocaBracoEsquerdo(135, 225);
+    // SocaBracoDireito(225, 135);
     socoAux = 0;
 }
 
@@ -484,30 +502,41 @@ void Lutador::GiraSozinho(GLfloat inc, GLfloat xLutador, GLfloat yLutador)
 GLfloat Lutador::GetXFromMesh(GLfloat meshpoint)
 {
     GLfloat point = RotateX(gMeshInglesVer.vertsPos[meshpoint].x, gMeshInglesVer.vertsPos[meshpoint].y, gGiro);
-    return point + gX;
+    return point*gProporcao + gX;
 }
 GLfloat Lutador::GetYFromMesh(GLfloat meshpoint)
 {
     GLfloat point = RotateY(gMeshInglesVer.vertsPos[meshpoint].x, gMeshInglesVer.vertsPos[meshpoint].y, gGiro);
-    return point + gY;}
+    return point*gProporcao + gY;}
 
 GLfloat Lutador::GetZFromMesh(GLfloat meshpoint)
 {
-    return gMeshInglesVer.vertsPos[meshpoint].z + gZ;
+    return gMeshInglesVer.vertsPos[meshpoint].z*gProporcao + gZ;
 }
 
 GLfloat Lutador::GetXFromRealMesh(GLfloat meshpoint)
 {
     GLfloat point = RotateX(gMesh.vertsPos[meshpoint].x, gMesh.vertsPos[meshpoint].y, gGiro);
-    return point + gX;
+    return (point*gProporcao + gX);
 }
 GLfloat Lutador::GetYFromRealMesh(GLfloat meshpoint)
 {
     GLfloat point = RotateY(gMesh.vertsPos[meshpoint].x, gMesh.vertsPos[meshpoint].y, gGiro);
-    return point + gY;
+    return (point*gProporcao + gY) ;
 }
 GLfloat Lutador::GetZFromRealMesh(GLfloat meshpoint)
 {
-    return gMesh.vertsPos[meshpoint].z + gZ;
-
+    return (gMesh.vertsPos[meshpoint].z*gProporcao + gZ);
+}
+GLfloat Lutador::GetXMeshPuro(GLfloat meshpoint)
+{
+    return gMesh.vertsPos[meshpoint].x;
+}
+GLfloat Lutador::GetYMeshPuro(GLfloat meshpoint)
+{
+    return gMesh.vertsPos[meshpoint].y;
+}
+GLfloat Lutador::GetZMeshPuro(GLfloat meshpoint)
+{
+    return gMesh.vertsPos[meshpoint].z;
 }

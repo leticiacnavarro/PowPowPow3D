@@ -9,13 +9,6 @@ void Menu::DesenhaMiniArena(GLfloat side, double r, double g, double b)
 {
     float halfWidth = side/2;
 
-    // glBegin(GL_QUADS);
-    //     glVertex2f(-halfWidth, 0);
-    //     glVertex2f(halfWidth, 0);
-    //     glVertex2f(halfWidth, height);
-    //     glVertex2f(-halfWidth, height);
-    // glEnd();
-    //     glPopAttrib();
     glClear(GL_DEPTH_BUFFER_BIT);
 
     glColor3f (r, g, b);
@@ -76,7 +69,7 @@ void Menu::RasterRectangle(GLfloat x, GLfloat y, GLfloat z, double r, double g, 
         glDisable(GL_LIGHTING);
         glDisable(GL_TEXTURE_2D);
         glColor3f(r,g,b);
-        glTranslatef(0.9, 0.1, 0);
+        glTranslatef(0.85, 0.15, 0);
         DesenhaMiniArena(0.25, 1, 0, 1);
         // glTranslatef(0.01, 0.01, 0);
         // DesenhaCirc(0.01, 1, 1, 0);
@@ -116,10 +109,10 @@ void Menu::CalculaPosicao(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)
 {
     //cout << "gXLutador: " << x1 << "gYLutador: " << gYLutador << endl;
 
-    gXLutador = (x1 * 0.25)/(gX)/2;
-    gYLutador = (y1 * 0.25)/(gX) /2;
-    gXBot = (x2 * 0.25)/(gX)/2;
-    gYBot = (y2 * 0.25)/(gX)/2;
+    gXLutador = (x1 * (0.25)*2)/(gX)/2;
+    gYLutador = (y1 * (0.25)*2)/(gX) /2;
+    gXBot = (x2 * (0.25)*2)/(gX)/2;
+    gYBot = (y2 * (0.25)*2)/(gX)/2;
 
 }
 
