@@ -165,8 +165,8 @@ void Menu::DesenhaFinalJogo(bool ganhou)
         GLfloat x = 0.5;
         GLfloat y = 0.5;
 
-    //    int tamanho = glutBitmapLength(fonte, reinterpret_cast<const unsigned char*>(temp)); 
-    //    x = x - (tamanho/2);
+        int tamanho = glutBitmapLength(fonte, reinterpret_cast<const unsigned char*>(temp)); 
+        x = x - (tamanho/2);
 
         PrintText(x, y, temp, 0, 0, 0);
 

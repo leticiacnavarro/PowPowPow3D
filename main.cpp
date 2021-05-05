@@ -12,7 +12,7 @@
 #include "util.h"
 
 #define INC_KEY 1
-#define INC_KEYIDLE 0.1
+#define INC_KEYIDLE 0.2
 
 //Key status
 int keyStatus[256];
@@ -47,7 +47,7 @@ GLboolean botaoCerto;
 
 // Bot socando pow pow pow
 GLint distanciaSoco = 0;
-GLint distanciaSocoTotal = 25;
+GLint distanciaSocoTotal = 200;
 GLint braco = 1;
 GLboolean parouDeSocarBot = true;
 
@@ -58,7 +58,37 @@ bool modoTreino;
 //Util
 int toggleCam = 0;
 bool toggleLight = false;
+bool toggleApagaTudo;
 int buttonDown = 0;
+
+GLuint texturePlane;
+
+GLuint LoadTextureRAW( const char * filename )
+{
+
+    GLuint texture;
+    
+    Image* image = loadBMP(filename);
+
+    glGenTextures( 1, &texture );
+    glBindTexture( GL_TEXTURE_2D, texture );
+    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,GL_MODULATE );
+//    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,GL_REPLACE );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR );
+    glTexImage2D(GL_TEXTURE_2D,                //Always GL_TEXTURE_2D
+                             0,                            //0 for now
+                             GL_RGB,                       //Format OpenGL uses for image
+                             image->width, image->height,  //Width and height
+                             0,                            //The border of the image
+                             GL_RGB, //GL_RGB, because pixels are stored in RGB format
+                             GL_UNSIGNED_BYTE, //GL_UNSIGNED_BYTE, because pixels are stored
+                                               //as unsigned numbers
+                             image->pixels);               //The actual pixel data
+    delete image;
+
+    return texture;
+}
 
 void changeCamera(int angle, int zNear, int zFar)
 {
@@ -72,14 +102,52 @@ void changeCamera(int angle, int zNear, int zFar)
         glutPostRedisplay();
 }
 
+void orthogonalStart() 
+{
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(-500/2, 500/2, -500/2, 500/2);
+    glMatrixMode(GL_MODELVIEW);
+}
+
+void orthogonalEnd()
+{
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+}
+
+void background()
+{
+    glBindTexture( GL_TEXTURE_2D, texturePlane ); 
+
+    orthogonalStart();
+
+    // texture width/height
+    const int iw = 500;
+    const int ih = 500;
+
+    glPushMatrix();
+    glTranslatef( -iw/2, -ih/2, 0 );
+    glBegin(GL_QUADS);
+        glTexCoord2i(0,0); glVertex2i(0, 0);
+        glTexCoord2i(1,0); glVertex2i(iw, 0);
+        glTexCoord2i(1,1); glVertex2i(iw, ih);
+        glTexCoord2i(0,1); glVertex2i(0, ih);
+    glEnd();
+    glPopMatrix();
+
+    orthogonalEnd();
+}
 
 void renderScene(void)
 {
     
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity(); 
-  //  glClearColor(0.692,	0.852,	0.988, 1.0f); // Black, no opacity(alpha).
-    glClearColor(0,0,0, 1.0f); // Black, no opacity(alpha).
+    glClearColor(0.692,	0.852,	0.988, 1.0f); // Black, no opacity(alpha).
+  //  glClearColor(0,0,0, 1.0f); // Black, no opacity(alpha).
 
     glClear (   GL_COLOR_BUFFER_BIT | 
                 GL_DEPTH_BUFFER_BIT);
@@ -87,6 +155,7 @@ void renderScene(void)
     
     if(pontoLutador < 10 && pontoBot < 10)
     {    
+        background();
         menu.DesenhaMiniMapa(lutador.GetX(), lutador.GetY(), bot.GetX(), bot.GetY());
 
         menu.DesenhaPlacar(pontoLutador, pontoBot);
@@ -94,7 +163,7 @@ void renderScene(void)
         util.ProcessaCamera(toggleCam, lutador);
    //     util.DrawAxes(50);
         ringue.Desenha();
-        util.Iluminacao(lutador, bot, toggleLight);
+        util.Iluminacao(lutador, bot, toggleLight, ringue, toggleApagaTudo);
         bot.Desenha(toggleLight);
 
         lutador.Desenha(toggleLight);
@@ -128,12 +197,11 @@ void keyPress(unsigned char key, int x, int y)
             break;
         case '2':
             toggleCam = 1;
-            changeCamera(util.GetCamAngle(), 8, 1000);
+            changeCamera(50, 15, 1000);
             break;
         case '3':
             toggleCam = 2;
             changeCamera(util.GetCamAngle(), 5, 1000);
-
             break;
         case 'n':
         case 'N':
@@ -155,6 +223,10 @@ void keyPress(unsigned char key, int x, int y)
         case 'S':
              keyStatus[(int)('s')] = 1; //Using keyStatus trick
              break;
+        case 'l':
+        case 'L':
+            toggleApagaTudo = !toggleApagaTudo;
+            break;
         case 27 :
              exit(0);
     }
@@ -183,8 +255,11 @@ void init(void)
   //  glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
 
+    ringue.CarregaTexturas();
     lutador.CarregaTexturas();
     bot.CarregaTexturas();  
+    texturePlane = LoadTextureRAW( "modelos/aaaa.bmp" );
+
 }
 
 void movimentaBot(double inc)
@@ -447,7 +522,7 @@ int main(int argc, char *argv[])
     Inicializa(argv[1]);
 
     // Create the window.
-    glutInitWindowSize(Width, Height);
+    glutInitWindowSize(500, 500);
     glutInitWindowPosition(150,50);
     glutCreateWindow("Pow Pow Pow");
  

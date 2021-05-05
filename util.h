@@ -9,6 +9,7 @@
 #include <math.h>
 
 #include "lutador.h"
+#include "ringue.h"
 
 using namespace std;
 
@@ -39,9 +40,9 @@ public:
     void ProcessaCamera(int toggle, Lutador &lutador);
     GLint GetCamAngle();
     void Camera();
-    void Iluminacao(Lutador &lutador, Lutador &bot, bool modoNoturno);
+    void Iluminacao(Lutador &lutador, Lutador &bot, bool modoNoturno, Ringue &ringue, bool apaga);
     void DrawAxes(double size);
-
+    void ApagaTudo(bool apaga);
 };
 
 #endif	/* UTIL_H */

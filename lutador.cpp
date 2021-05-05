@@ -88,8 +88,7 @@ GLfloat Lutador::RaioSombra()
 
 void DesenhaCirc(GLint radius, GLfloat R, GLfloat G, GLfloat B)
 {
-    glDisable(GL_LIGHTING);
-     
+    glDisable(GL_LIGHTING);    
    
     int pts = 50;
     glColor4f (R, G, B, 0.2);
@@ -156,9 +155,9 @@ void Lutador::DesenhaLutador(GLfloat x, GLfloat y, bool modoNoturno)
     glRotatef(gGiro, 0, 0, 1);
     GLuint textureSun;
 
-    if(modoNoturno){
-        DesenhaCirc((raioSombra * 0.75), 1, 1, 1);
-    }
+    // if(modoNoturno){
+    //     DesenhaCirc((raioSombra), 1, 1, 1);
+    // }
 
     DesenhaMesh();    
  //   DesenhaEsferaCabeca();
@@ -259,7 +258,7 @@ void Lutador::Anda(GLfloat dY)
     std::string objFrame;
     objFrame = "modelos/andar/andar_0000" + frame + ".obj";
     gMesh.loadMesh(objFrame);
-
+//  cout << "gX X: " << gX <<endl;
 }
 
 void Lutador::DirecaoPrimeiraPessoa(GLfloat dY, GLfloat ponto[3])
@@ -349,11 +348,11 @@ bool Lutador::VerificaSePode(GLfloat dY, GLfloat xArena, GLfloat yArena, GLfloat
 
     DirecaoNariz(raioSombra, gGiro, gX, gY, xOut, yOut, dY);
 
-    GLfloat yColisaoLutador = gY + dY + (raioSombra * 3);
-    GLfloat xColisaoLutador = gX + (raioSombra * 3);
+    GLfloat yColisaoLutador = gY + dY + (raioSombra);
+    GLfloat xColisaoLutador = gX + (raioSombra);
 
     GLfloat distanciaPontos = DistanciaPontos(xOut, yOut, xLutador2, yLutador2);
-    GLfloat distancia = raioColisao * 3.5;
+    GLfloat distancia = raioColisao * 5;
 
     yArena = (yArena / 2) - (raioSombra/2);
     xArena = (xArena / 2) - (raioSombra/2);
@@ -382,42 +381,26 @@ bool Lutador::VerificaSePode(GLfloat dY, GLfloat xArena, GLfloat yArena, GLfloat
 
 void Lutador::CalculaAlturaLutador(){
 
-    GLfloat z1 = gMesh.vertsPos[pontoMeioCabeca].z;
-    GLfloat z2 = gMesh.vertsPos[pontoPeDireito].z;
+    GLfloat z1 = gMesh.vertsPos[pontoMeioCabeca].z * gProporcao;
+    GLfloat z2 = gMesh.vertsPos[pontoPeDireito].z * gProporcao;
 
     altura = z1 - z2;
-cout << "altura X: " << altura <<endl;
 }
 
 
-// void Lutador::SocaBracoDireito(GLfloat angulo1, GLfloat angulo2){
-//     gThetaDireito1 = angulo1;
-//     gThetaDireito2 = angulo2;
-
-// }
-
-
-// void Lutador::SocaBracoEsquerdo(GLfloat angulo1, GLfloat angulo2){
-//     gThetaEsquerdo1 = angulo1;
-//     gThetaEsquerdo2 = angulo2;
-// }
-
 bool Lutador::Soca(GLfloat distanciaTotal, GLfloat distanciaPercorrida, GLint braco, Lutador inimigo){
+    
+    GLint contagem = (distanciaPercorrida * framesSoco)/distanciaTotal;
+         
 
-    if(socoAux > framesSoco){
-
-        socoAux = framesSoco;
-    }
-
-    GLint contagem = (distanciaPercorrida * framesSoco)/ distanciaTotal;
-    if(contagem > socoAux){
-        socoAux++;
-        contagem = socoAux;
-    }
-
-    if(contagem < 1)
-    {
+    if(contagem < 1){
         contagem = 1;
+    }
+    
+    // cout << "contagem: " << contagem <<endl;
+    
+    if(contagem > framesSoco){
+        contagem = framesSoco;
     }
     std::string frame = std::string(2 - to_string(contagem).length(), '0') + to_string(contagem);
     std::string objFrame;
@@ -439,10 +422,8 @@ bool Lutador::Soca(GLfloat distanciaTotal, GLfloat distanciaPercorrida, GLint br
 
 
 void Lutador::ParaDeSocar()
-{
-    // SocaBracoEsquerdo(135, 225);
-    // SocaBracoDireito(225, 135);
-    socoAux = 0;
+{    
+   // gMesh.loadMesh("modelos/walking/walking_000001.obj");
 }
 
 GLfloat Lutador::GetX(){
@@ -539,4 +520,17 @@ GLfloat Lutador::GetYMeshPuro(GLfloat meshpoint)
 GLfloat Lutador::GetZMeshPuro(GLfloat meshpoint)
 {
     return gMesh.vertsPos[meshpoint].z;
+}
+
+GLfloat Lutador::GetXMeshNormal(GLfloat meshpoint)
+{
+    return gMesh.vertsNorm[meshpoint].x;
+}
+GLfloat Lutador::GetYMeshNormal(GLfloat meshpoint)
+{
+    return gMesh.vertsNorm[meshpoint].y;
+}
+GLfloat Lutador::GetZMeshNormal(GLfloat meshpoint)
+{
+    return gMesh.vertsNorm[meshpoint].z;
 }

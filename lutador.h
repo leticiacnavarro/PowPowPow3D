@@ -31,6 +31,9 @@ using namespace std;
 #define pontoPeEsquerdo 1024
 #define pontoPeDireito 1424
 
+#define pontoMao1 3461
+#define pontoMao2 4822
+
 #define framesSoco 31
 #define framesAnda 31
 
@@ -43,7 +46,6 @@ class Lutador
     GLfloat rCabeca;
     GLfloat rNariz;
     GLfloat rMao;
-    GLfloat altura;
 
     GLfloat bracoHeight;
     GLfloat bracoWidth;
@@ -154,7 +156,7 @@ public:
         }  
       //        gMesh.loadMesh("modelos/socandoDireito/socando_000001.obj");
 
-        gMesh.loadMesh("modelos/walking/walking_000001.obj");
+        gMesh.loadMesh("modelos/andar/andar_000001.obj");
         gMeshInglesVer.loadMesh("modelos/girl.obj");
 
         raioSombra = RaioSombra();
@@ -204,11 +206,19 @@ public:
 
     GLfloat GetZMeshPuro(GLfloat meshpoint);
 
+    GLfloat GetXMeshNormal(GLfloat meshpoint);
+
+    GLfloat GetYMeshNormal(GLfloat meshpoint);
+
+    GLfloat GetZMeshNormal(GLfloat meshpoint);
+
     void DirecaoPrimeiraPessoa(GLfloat dY, GLfloat ponto[3]);
 
     void CarregaTexturas();
 
     GLfloat raioSombra;
+    
+    GLfloat altura;
 
 };
 

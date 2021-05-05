@@ -14,7 +14,15 @@ using namespace std;
 #define pontoBase2 2085
 
 #define profundidade 60
+
+#define pontoCanto1 1436
+#define pontoCanto2 48
+#define pontoCanto3 742
+#define pontoCanto4 2128
+
+
 #include "objloader.h"
+#include "imageloader.h"
 
 class Ringue
 {
@@ -38,17 +46,22 @@ private:
     
     void DefineTamanhoLadoTotal();
 
+    GLuint LoadTextureRAW( const char * filename );
+
+    void DefineAltura();
 
 public:
     //Tamanho
     int lado;
     int ladoTotal;
+    GLfloat altura;
 
     Ringue()
     {
-        gMesh.loadMesh("modelos/boxingRing.obj");
+        gMesh.loadMesh("modelos/ringueNew.obj");
         DefineTamanhoLado();
         DefineTamanhoLadoTotal();
+        DefineAltura();
     }
 
     void Iniciacao(GLfloat x, GLfloat y){
@@ -60,6 +73,15 @@ public:
         DesenhaRingue();
     }
     GLfloat LadoColisao();
+
+    void CarregaTexturas();
+    
+    GLfloat GetXMeshPuro(GLfloat meshpoint);
+
+    GLfloat GetYMeshPuro(GLfloat meshpoint);
+
+    GLfloat GetZMeshPuro(GLfloat meshpoint);
+    
 
 };
 
