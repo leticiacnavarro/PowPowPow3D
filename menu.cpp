@@ -140,11 +140,11 @@ void Menu::DesenhaPlacar(GLint pontosLutador, GLint pontosBot)
 {
         static char str[1000];
         char *temp;
-        sprintf(str, "%d / %d", pontosLutador, pontosBot);
+        sprintf(str, "Lutador: %d / Bot: %d", pontosLutador, pontosBot);
         temp = str;
         GLfloat x = 0.01;
         GLfloat y = 0.01;
-        PrintText(x, y, temp, 0, 1, 0);
+        PrintText(x, y, temp, 1, 0, 1);
 
 }
 
@@ -165,14 +165,10 @@ void Menu::DesenhaFinalJogo(bool ganhou)
         GLfloat x = 0.5;
         GLfloat y = 0.5;
 
-        int tamanho = glutBitmapLength(fonte, reinterpret_cast<const unsigned char*>(temp)); 
+        GLfloat tamanho = (glutBitmapLength(fonte, reinterpret_cast<const unsigned char*>(temp))); 
+        tamanho = tamanho/500;
         x = x - (tamanho/2);
 
-        PrintText(x, y, temp, 0, 0, 0);
+        PrintText(x, y, temp, 1, 1, 1);
 
 }
-
-void Menu::DesenhaMenu(){
-    
-}
-

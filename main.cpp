@@ -61,7 +61,10 @@ bool toggleLight = false;
 bool toggleApagaTudo;
 int buttonDown = 0;
 
+//Texture
 GLuint texturePlane;
+GLuint textureBotWins;
+GLuint texturePlayerWins;
 
 GLuint LoadTextureRAW( const char * filename )
 {
@@ -105,6 +108,9 @@ void changeCamera(int angle, int zNear, int zFar)
 void orthogonalStart() 
 {
     glMatrixMode(GL_PROJECTION);
+    // if(!toggleLight){
+        glDisable(GL_LIGHTING);
+    // }
     glPushMatrix();
     glLoadIdentity();
     gluOrtho2D(-500/2, 500/2, -500/2, 500/2);
@@ -114,13 +120,13 @@ void orthogonalStart()
 void orthogonalEnd()
 {
     glMatrixMode(GL_PROJECTION);
+    glEnable(GL_LIGHTING);
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
 }
 
-void background()
+void background(GLuint texture)
 {
-    glBindTexture( GL_TEXTURE_2D, texturePlane ); 
 
     orthogonalStart();
 
@@ -129,6 +135,8 @@ void background()
     const int ih = 500;
 
     glPushMatrix();
+    glBindTexture( GL_TEXTURE_2D, texture); 
+
     glTranslatef( -iw/2, -ih/2, 0 );
     glBegin(GL_QUADS);
         glTexCoord2i(0,0); glVertex2i(0, 0);
@@ -155,7 +163,7 @@ void renderScene(void)
     
     if(pontoLutador < 10 && pontoBot < 10)
     {    
-        background();
+        background(texturePlane);
         menu.DesenhaMiniMapa(lutador.GetX(), lutador.GetY(), bot.GetX(), bot.GetY());
 
         menu.DesenhaPlacar(pontoLutador, pontoBot);
@@ -171,11 +179,17 @@ void renderScene(void)
     }
     else if(pontoLutador >= pontoBot)
     {
-        menu.DesenhaFinalJogo(true);
+        background(texturePlayerWins);
+
+     //   background();
+      //  menu.DesenhaFinalJogo(true);
     }
     else if(pontoBot > pontoLutador)
     {
-        menu.DesenhaFinalJogo(false);
+        background(textureBotWins);
+
+       // background();
+     //   menu.DesenhaFinalJogo(false);
     }
 
     glutSwapBuffers(); // Desenha the new frame of the game.
@@ -258,8 +272,11 @@ void init(void)
     ringue.CarregaTexturas();
     lutador.CarregaTexturas();
     bot.CarregaTexturas();  
-    texturePlane = LoadTextureRAW( "modelos/aaaa.bmp" );
+    texturePlane = LoadTextureRAW( "modelos/ceu.bmp" );
+    textureBotWins = LoadTextureRAW( "modelos/bot_wins.bmp" );
+    texturePlayerWins = LoadTextureRAW( "modelos/player_wins.bmp" );
 
+    ringue.CalculaAlturaComBaseNoLutador(lutador.altura);
 }
 
 void movimentaBot(double inc)

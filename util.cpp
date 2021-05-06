@@ -98,10 +98,11 @@ void Util::Iluminacao(Lutador &lutador, Lutador &bot, bool modoNoturno, Ringue &
         glDisable(GL_LIGHT1);    
         glDisable(GL_LIGHT2);    
         glDisable(GL_LIGHT3);  
+        GLfloat alturaLuz = lutador.altura * 1.5;
 
         glPushMatrix();
             
-            glTranslatef(lutador.GetXFromRealMesh(pontoMeioCabeca), lutador.GetYFromRealMesh(pontoMeioCabeca), lutador.altura + (lutador.altura * 0.5));
+            glTranslatef(lutador.GetXFromRealMesh(pontoMeioCabeca), lutador.GetYFromRealMesh(pontoMeioCabeca), alturaLuz);
             GLfloat pontoFoco[3];
 
             lutador.DirecaoPrimeiraPessoa(20, pontoFoco);
@@ -109,29 +110,29 @@ void Util::Iluminacao(Lutador &lutador, Lutador &bot, bool modoNoturno, Ringue &
             GLfloat light1_ambient[] = { 0.4, 0.4, 0.4, 1.0 };
             GLfloat light1_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
             GLfloat light1_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-            GLfloat light1_position[] = {0,0,0, 1};
+            GLfloat light1_position[] = { -2.0, 2.0, 1.0, 1.0 };
             GLfloat spot_direction[] = { 0,0,-1, 1};
-
+ 
             glLightfv(GL_LIGHT4, GL_AMBIENT, light1_ambient);
             glLightfv(GL_LIGHT4, GL_DIFFUSE, light1_diffuse);
             glLightfv(GL_LIGHT4, GL_SPECULAR, light1_specular);
             glLightfv(GL_LIGHT4, GL_POSITION, light1_position);
-            glLightf(GL_LIGHT4, GL_SPOT_CUTOFF, 20.0);
+            glLightf(GL_LIGHT4, GL_SPOT_CUTOFF, 15.0);
             glLightfv(GL_LIGHT4, GL_SPOT_DIRECTION, spot_direction);
             glLightf(GL_LIGHT4, GL_SPOT_EXPONENT, 2);
             
-            glDisable(GL_LIGHTING);
-                glPointSize(15);
-                glColor3f(1.0,1.0,0.0);
-                glBegin(GL_POINTS);
-                    glVertex3f(light1_position[0],light1_position[1],light1_position[2]);
-                glEnd();
+            // glDisable(GL_LIGHTING);
+            //     glPointSize(15);
+            //     glColor3f(1.0,1.0,0.0);
+            //     glBegin(GL_POINTS);
+            //         glVertex3f(light1_position[0],light1_position[1],light1_position[2]);
+            //     glEnd();
 
         glPopMatrix();
         glPushMatrix();
 
         bot.DirecaoPrimeiraPessoa(20, pontoFoco);
-            glTranslatef(bot.GetXFromRealMesh(pontoMeioCabeca), bot.GetYFromRealMesh(pontoMeioCabeca), bot.altura + (bot.altura * 0.5));
+            glTranslatef(bot.GetXFromRealMesh(pontoMeioCabeca), bot.GetYFromRealMesh(pontoMeioCabeca), alturaLuz);
             //glTranslatef(0, 0, 0);
 
         glLightfv(GL_LIGHT5, GL_AMBIENT, light1_ambient);
@@ -143,12 +144,12 @@ void Util::Iluminacao(Lutador &lutador, Lutador &bot, bool modoNoturno, Ringue &
         glLightfv(GL_LIGHT5, GL_SPOT_DIRECTION, spot_direction);
         glLightf(GL_LIGHT5, GL_SPOT_EXPONENT, 2.0);
         
-        glDisable(GL_LIGHTING);
-            glPointSize(15);
-            glColor3f(1.0,1.0,0.0);
-            glBegin(GL_POINTS);
-                glVertex3f(light1_position[0],light1_position[1],light1_position[2]);
-            glEnd();  
+        // glDisable(GL_LIGHTING);
+        //     glPointSize(15);
+        //     glColor3f(1.0,1.0,0.0);
+        //     glBegin(GL_POINTS);
+        //         glVertex3f(light1_position[0],light1_position[1],light1_position[2]);
+        //     glEnd();  
         glPopMatrix();
             glEnable(GL_LIGHT4);
             glEnable(GL_LIGHT5);  
@@ -161,56 +162,56 @@ void Util::Iluminacao(Lutador &lutador, Lutador &bot, bool modoNoturno, Ringue &
         glDisable (GL_LIGHT5);
 
         glDisable (GL_LIGHTING);
-        GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+        GLfloat light_diffuse[] = { 0.74, 0.752, 0.960, 0.0 };
         GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
         GLfloat alturaLuz = lutador.altura * 1.5;
         GLfloat light_position[] = {ringue.GetXMeshPuro(pontoCanto1), ringue.GetYMeshPuro(pontoCanto1), alturaLuz, 1};
         glLightfv(GL_LIGHT0,GL_POSITION,light_position);
-        glDisable(GL_LIGHTING);
-            glPointSize(15);
-            glColor3f(1.0,1.0,0.0);
-            glBegin(GL_POINTS);
-                glVertex3f(light_position[0],light_position[1],light_position[2]);
-            glEnd();  
+        // glDisable(GL_LIGHTING);
+        //     glPointSize(15);
+        //     glColor3f(1.0,1.0,0.0);
+        //     glBegin(GL_POINTS);
+        //         glVertex3f(light_position[0],light_position[1],light_position[2]);
+        //     glEnd();  
 
         GLfloat light_position2[] = {ringue.GetXMeshPuro(pontoCanto2), ringue.GetYMeshPuro(pontoCanto2), alturaLuz, 1};
         glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
         glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse);
         glLightfv(GL_LIGHT1,GL_POSITION,light_position2);
-        glDisable(GL_LIGHTING);
-            glPointSize(15);
-            glColor3f(1.0,1.0,0.0);
-            glBegin(GL_POINTS);
-                glVertex3f(light_position2[0],light_position2[1],light_position2[2]);
-            glEnd();  
+        // glDisable(GL_LIGHTING);
+        //     glPointSize(15);
+        //     glColor3f(1.0,1.0,0.0);
+        //     glBegin(GL_POINTS);
+        //         glVertex3f(light_position2[0],light_position2[1],light_position2[2]);
+        //     glEnd();  
 
         GLfloat light_position3[] = {ringue.GetXMeshPuro(pontoCanto3), ringue.GetYMeshPuro(pontoCanto3), alturaLuz, 1};
         glLightfv(GL_LIGHT2, GL_SPECULAR, light_specular);
         glLightfv(GL_LIGHT2, GL_DIFFUSE, light_diffuse);
         glLightfv(GL_LIGHT2,GL_POSITION,light_position3);
-        glDisable(GL_LIGHTING);
-            glPointSize(15);
-            glColor3f(1.0,1.0,0.0);
-            glBegin(GL_POINTS);
-                glVertex3f(light_position3[0],light_position3[1],light_position3[2]);
-            glEnd();  
+        // glDisable(GL_LIGHTING);
+        //     glPointSize(15);
+        //     glColor3f(1.0,1.0,0.0);
+        //     glBegin(GL_POINTS);
+        //         glVertex3f(light_position3[0],light_position3[1],light_position3[2]);
+        //     glEnd();  
         GLfloat light_position4[] = {ringue.GetXMeshPuro(pontoCanto4), ringue.GetYMeshPuro(pontoCanto4), alturaLuz, 1};
 
      //   GLfloat light_position4[] = {0, 0, 10, 1};
         glLightfv(GL_LIGHT3, GL_SPECULAR, light_specular);
         glLightfv(GL_LIGHT3, GL_DIFFUSE, light_diffuse);
         glLightfv(GL_LIGHT3,GL_POSITION,light_position4);
-        glDisable(GL_LIGHTING);
-            glPointSize(15);
-            glColor3f(1.0,1.0,0.0);
-            glBegin(GL_POINTS);
-                glVertex3f(light_position4[0],light_position4[1],light_position4[2]);
-            glEnd();  
+        // glDisable(GL_LIGHTING);
+        //     glPointSize(15);
+        //     glColor3f(1.0,1.0,0.0);
+        //     glBegin(GL_POINTS);
+        //         glVertex3f(light_position4[0],light_position4[1],light_position4[2]);
+        //     glEnd();  
                         
-            glEnable(GL_LIGHT0);    
-            glEnable(GL_LIGHT1);    
-            glEnable(GL_LIGHT2);    
-            glEnable(GL_LIGHT3);   
+        glEnable(GL_LIGHT0);    
+        glEnable(GL_LIGHT1);    
+        glEnable(GL_LIGHT2);    
+        glEnable(GL_LIGHT3);   
  
 
         glEnable(GL_LIGHTING);

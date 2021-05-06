@@ -36,8 +36,8 @@ void Lutador::DesenhaEsferaCabeca(){
     GetVectorMiddle(a, b, c);
     GLfloat raio = DistanciaPontos(a[0], a[1], b[0], b[1]);
     glPushMatrix();
-        glTranslatef(pontoX, pontoY, c[2]);
-        glutSolidSphere (raio, 20, 16);
+        glTranslatef(0, 0, -30);
+        glutSolidSphere (60, 20, 16);
     glPopMatrix();
 
 
@@ -160,7 +160,7 @@ void Lutador::DesenhaLutador(GLfloat x, GLfloat y, bool modoNoturno)
     // }
 
     DesenhaMesh();    
- //   DesenhaEsferaCabeca();
+  //  DesenhaEsferaCabeca();
 
     glPopMatrix();
 }

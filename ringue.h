@@ -13,12 +13,13 @@ using namespace std;
 #define pontoBase1 1391
 #define pontoBase2 2085
 
-#define profundidade 60
-
 #define pontoCanto1 1436
 #define pontoCanto2 48
 #define pontoCanto3 742
 #define pontoCanto4 2128
+
+#define pontoHaste1 2102
+#define pontoHaste2 2103
 
 
 #include "objloader.h"
@@ -36,6 +37,7 @@ class Ringue
 
     //Proporcao
     GLfloat gProporcao;
+    GLfloat gProporcaoAltura;
 
 
 
@@ -50,18 +52,29 @@ private:
 
     void DefineAltura();
 
+    void DefineProfundidade();
+
+    GLuint texture;
+
 public:
     //Tamanho
     int lado;
     int ladoTotal;
     GLfloat altura;
+    GLfloat profundidade;
+
 
     Ringue()
     {
         gMesh.loadMesh("modelos/ringueNew.obj");
         DefineTamanhoLado();
+
         DefineTamanhoLadoTotal();
+
         DefineAltura();
+
+        DefineProfundidade();
+
     }
 
     void Iniciacao(GLfloat x, GLfloat y){
@@ -82,7 +95,7 @@ public:
 
     GLfloat GetZMeshPuro(GLfloat meshpoint);
     
-
+    void CalculaAlturaComBaseNoLutador(GLfloat alturaLutador);
 };
 
 #endif	/* RINGUE_H */

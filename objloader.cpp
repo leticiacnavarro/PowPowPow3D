@@ -124,9 +124,8 @@ void mesh::draw(){
     glMaterialfv(GL_FRONT, GL_EMISSION, materialEmission);
     glMaterialfv(GL_FRONT, GL_AMBIENT, materialColorA);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, materialColorD);
-		glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-		glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-
+	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
         
     glBindTexture (GL_TEXTURE_2D, textura);
 
